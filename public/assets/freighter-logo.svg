@@ -1,0 +1,7 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="40" height="40" rx="10" fill="#13141B"/>
+  <!-- Freighter official geometric shield / rocket symbol -->
+  <path d="M20 7L31 15.5V24.5L20 33L9 24.5V15.5L20 7Z" fill="#3E1BDB"/>
+  <path d="M20 12L27 17.5V22.5L20 28L13 22.5V17.5L20 12Z" fill="#00F094"/>
+  <path d="M20 16L23.5 18.8V21.2L20 24L16.5 21.2V18.8L20 16Z" fill="#13141B"/>
+</svg>
