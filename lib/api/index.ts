@@ -93,4 +93,21 @@ export class ApiClient {
       };
     }
   }
+
+  public static async patch<T, B = unknown>(endpoint: string, body: B, token?: string): Promise<ApiResponse<T>> {
+    try {
+      const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: 'PATCH',
+        headers: this.getHeaders(token),
+        body: JSON.stringify(body),
+      });
+      return await this.processResponse<T>(res);
+    } catch (error) {
+      return {
+        status: 'error',
+        success: false,
+        message: error instanceof Error ? error.message : 'Network request failed',
+      };
+    }
+  }
 }

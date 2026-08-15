@@ -10,4 +10,8 @@ export class QuotesService {
   public static async getQuote(id: string, token?: string): Promise<ApiResponse<Quote>> {
     return ApiClient.get<Quote>(`/quotes/${id}`, token);
   }
+
+  public static async getQuoteById(id: string, token?: string): Promise<ApiResponse<Quote>> {
+    return this.getQuote(id, token);
+  }
 }

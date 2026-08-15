@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Header } from '@/components/layout/Header';
+import { GridScan } from '@/components/backgrounds/GridScan';
 import {
   ArrowRight,
   Check,
@@ -14,12 +16,16 @@ import {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white dark:bg-[#090d16] text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200 selection:bg-emerald-500 selection:text-white">
-      <Header />
+    <div className="relative min-h-screen bg-white dark:bg-[#090d16] text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200 selection:bg-emerald-500 selection:text-white overflow-x-hidden">
+      {/* Background Grid Scan animation */}
+      <GridScan scanColor="#15e113" opacity={0.85} gridScale={45} scanSpeed={1.0} scanHeight={160} />
+
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <Header />
 
       <main>
         {/* ================= 1. HERO SECTION ================= */}
-        <section className="relative border-b border-slate-200 dark:border-slate-800/80 bg-subtle-grid pt-16 pb-20 md:pt-24 md:pb-28">
+        <section className="relative border-b border-slate-200 dark:border-slate-800/80 pt-16 pb-20 md:pt-24 md:pb-28">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
               
@@ -587,11 +593,17 @@ export default function Home() {
             
             {/* Brand column */}
             <div className="col-span-2 space-y-4">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded bg-emerald-600 flex items-center justify-center font-bold text-white text-xs">
-                  LR
-                </div>
-                <span className="font-bold text-slate-900 dark:text-slate-100 text-base tracking-tight">LuminaRail</span>
+              <div className="flex items-center gap-2.5">
+                <Image
+                  src="/brand/luminarail-icon-dark.svg"
+                  alt="LuminaRail Logo"
+                  width={28}
+                  height={28}
+                  className="w-7 h-7"
+                />
+                <span className="font-bold text-slate-900 dark:text-slate-100 text-base tracking-tight">
+                  Lumina<span className="text-[#15E113]">Rail</span>
+                </span>
               </div>
               <p className="text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed text-xs">
                 Settlement infrastructure platform connecting local fiat payments with Stellar USDC and Soroban smart-contract execution.
@@ -648,6 +660,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
