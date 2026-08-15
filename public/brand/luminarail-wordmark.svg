@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 80" width="100%" height="100%" fill="none">
+  <!-- Modern Geometric Sans-Serif Wordmark for LuminaRail -->
+  <style>
+    .brand-text {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 52px;
+      letter-spacing: -0.03em;
+    }
+    .text-lumina {
+      font-weight: 800;
+      fill: #F8FAFC;
+    }
+    .text-rail {
+      font-weight: 500;
+      fill: #15E113;
+    }
+  </style>
+
+  <g transform="translate(10, 56)">
+    <text class="brand-text">
+      <tspan class="text-lumina">Lumina</tspan><tspan class="text-rail">Rail</tspan>
+    </text>
+  </g>
+</svg>

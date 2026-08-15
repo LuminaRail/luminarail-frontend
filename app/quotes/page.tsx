@@ -4,6 +4,7 @@ import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { useQuotes } from '@/hooks/useQuotes';
+import { GridScan } from '@/components/backgrounds/GridScan';
 
 export default function QuotesPage() {
   const [amount, setAmount] = useState('');
@@ -43,8 +44,12 @@ export default function QuotesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <Header />
+    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col overflow-x-hidden">
+      {/* Background Grid Scan animation */}
+      <GridScan scanColor="#15e113" opacity={0.85} gridScale={45} scanSpeed={1.0} scanHeight={160} />
+
+      <div className="relative z-10 flex flex-col flex-1">
+        <Header />
 
       <main className="mx-auto max-w-5xl px-4 py-10">
         <div className="mb-8">
@@ -272,6 +277,7 @@ export default function QuotesPage() {
           </div>
         </div>
       </main>
+      </div>
     </div>
   );
 }
