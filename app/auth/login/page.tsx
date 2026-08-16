@@ -100,21 +100,21 @@ function LoginContent() {
   const activeError = formError || error;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
       <Header />
 
       <main className="flex-1 max-w-md w-full mx-auto py-12 px-4 flex flex-col justify-center">
-        <div className="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-8 shadow-2xl backdrop-blur-xl transition-all duration-300">
+        <div className="bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-8 shadow-2xl backdrop-blur-xl transition-all duration-300">
           
           {/* Header & Tabs */}
           <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mb-3">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 mb-3">
               <Lock className="w-6 h-6" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-100">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
               {mode === 'login' ? 'Sign In to LuminaRail' : 'Create LuminaRail Account'}
             </h1>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
               {mode === 'login'
                 ? 'Access non-custodial fiat settlement & Soroban liquidity rails'
                 : 'Register as a User or Merchant to start settling digital assets'}
@@ -122,14 +122,14 @@ function LoginContent() {
           </div>
 
           {/* Mode Switcher */}
-          <div className="grid grid-cols-2 gap-1 p-1 bg-slate-950 border border-slate-800 rounded-xl mb-6 text-xs font-semibold">
+          <div className="grid grid-cols-2 gap-1 p-1 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl mb-6 text-xs font-semibold">
             <button
               type="button"
               onClick={() => handleToggleMode('login')}
               className={`py-2 rounded-lg transition-all ${
                 mode === 'login'
                   ? 'bg-indigo-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               Sign In
@@ -140,7 +140,7 @@ function LoginContent() {
               className={`py-2 rounded-lg transition-all ${
                 mode === 'register'
                   ? 'bg-indigo-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               Register
@@ -149,15 +149,15 @@ function LoginContent() {
 
           {/* Alerts */}
           {activeError && (
-            <div className="mb-5 p-3.5 rounded-xl bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex items-center gap-2.5">
-              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+            <div className="mb-5 p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2.5">
+              <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
               <span>{activeError}</span>
             </div>
           )}
 
           {successMessage && (
-            <div className="mb-5 p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-800 text-emerald-300 text-xs flex items-center gap-2.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <div className="mb-5 p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs flex items-center gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
               <span>{successMessage}</span>
             </div>
           )}
@@ -165,34 +165,34 @@ function LoginContent() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold uppercase text-slate-400 mb-1.5">
+              <label className="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-400 mb-1.5">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                <Mail className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 top-3" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-all"
+                  className="w-full bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-all"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase text-slate-400 mb-1.5">
+              <label className="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-400 mb-1.5">
                 Password
               </label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                <Lock className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 top-3" />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-all"
+                  className="w-full bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-all"
                   required
                 />
               </div>
@@ -201,23 +201,23 @@ function LoginContent() {
             {mode === 'register' && (
               <>
                 <div>
-                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1.5">
-                    Phone Number <span className="text-slate-600 font-normal">(Optional)</span>
+                  <label className="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-400 mb-1.5">
+                    Phone Number <span className="text-slate-400 dark:text-slate-600 font-normal">(Optional)</span>
                   </label>
                   <div className="relative">
-                    <Phone className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                    <Phone className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 top-3" />
                     <input
                       type="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="+234 801 234 5678"
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-all"
+                      className="w-full bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1.5">
+                  <label className="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-400 mb-1.5">
                     Account Type
                   </label>
                   <div className="grid grid-cols-2 gap-2">
@@ -226,8 +226,8 @@ function LoginContent() {
                       onClick={() => setRole('USER')}
                       className={`p-2.5 rounded-xl border text-left text-xs transition-all ${
                         role === 'USER'
-                          ? 'border-indigo-500 bg-indigo-500/10 text-white'
-                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200'
+                          ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-500/10 text-slate-900 dark:text-white font-bold'
+                          : 'border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                       }`}
                     >
                       <div className="font-bold">Individual User</div>
@@ -239,8 +239,8 @@ function LoginContent() {
                       onClick={() => setRole('MERCHANT')}
                       className={`p-2.5 rounded-xl border text-left text-xs transition-all ${
                         role === 'MERCHANT'
-                          ? 'border-indigo-500 bg-indigo-500/10 text-white'
-                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200'
+                          ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-500/10 text-slate-900 dark:text-white font-bold'
+                          : 'border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                       }`}
                     >
                       <div className="font-bold">Merchant</div>
@@ -268,25 +268,25 @@ function LoginContent() {
           </form>
 
           {/* Footer note */}
-          <div className="mt-6 pt-4 border-t border-slate-800/80 text-center">
+          <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800/80 text-center">
             {mode === 'login' ? (
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 New to LuminaRail?{' '}
                 <button
                   type="button"
                   onClick={() => handleToggleMode('register')}
-                  className="text-emerald-400 font-semibold hover:underline"
+                  className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline"
                 >
                   Create an account
                 </button>
               </p>
             ) : (
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 Already registered?{' '}
                 <button
                   type="button"
                   onClick={() => handleToggleMode('login')}
-                  className="text-emerald-400 font-semibold hover:underline"
+                  className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline"
                 >
                   Sign in here
                 </button>
@@ -304,8 +304,8 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-emerald-400" />
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex items-center justify-center">
+          <Loader2 className="w-6 h-6 animate-spin text-emerald-600 dark:text-emerald-400" />
         </div>
       }
     >

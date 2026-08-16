@@ -247,21 +247,21 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity animate-fadeIn">
-      <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden font-sans">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 dark:bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity animate-fadeIn">
+      <div className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden font-sans transition-colors duration-200">
         
         {/* Header */}
-        <div className="bg-slate-900 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+        <div className="bg-slate-50 dark:bg-slate-900 px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+            <div className="p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-100">Confirm Settlement Order</h2>
-              <p className="text-xs text-slate-400">Review quote metrics and specify destination wallet</p>
+              <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Confirm Settlement Order</h2>
+              <p className="text-xs text-slate-600 dark:text-slate-400">Review quote metrics and specify destination wallet</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 cursor-pointer">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -269,14 +269,14 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
         {/* Content */}
         <div className="p-6 space-y-6">
           {loadingQuote ? (
-            <div className="py-12 flex flex-col items-center justify-center text-slate-400 gap-3">
-              <Loader2 className="w-6 h-6 animate-spin text-indigo-400" />
+            <div className="py-12 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 gap-3">
+              <Loader2 className="w-6 h-6 animate-spin text-indigo-600 dark:text-indigo-400" />
               <p className="text-xs">Loading quote metrics...</p>
             </div>
           ) : !quote && error ? (
-            <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex flex-col gap-3">
+            <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex flex-col gap-3">
               <div className="flex items-center gap-3">
-                <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
+                <AlertCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" />
                 <div>
                   <p className="font-semibold">Unable to process quote</p>
                   <p className="mt-0.5">{error}</p>
@@ -288,9 +288,9 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
               
               {/* Error Banner with Refresh Action */}
               {error && (
-                <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex items-center justify-between gap-3">
+                <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                    <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
                     <div>
                       <p className="font-semibold">Unable to process quote</p>
                       <p className="mt-0.5">{error}</p>
@@ -312,32 +312,32 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
 
               {/* Quote Expiry / Refresh Indicator */}
               {isExpired ? (
-                <div className="p-3.5 rounded-xl bg-amber-950/40 border border-amber-800/80 text-amber-300 text-xs flex items-center justify-between gap-2">
+                <div className="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 text-amber-800 dark:text-amber-300 text-xs flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                    <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
                     <span>Quote has expired. Refresh to lock in latest rate.</span>
                   </div>
                   <button
                     type="button"
                     onClick={handleRefreshQuote}
                     disabled={refreshingQuote}
-                    className="px-3 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-200 hover:bg-amber-500/30 text-xs font-semibold flex items-center gap-1.5 shrink-0 transition-all cursor-pointer disabled:opacity-50"
+                    className="px-3 py-1.5 rounded-lg bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 text-amber-800 dark:text-amber-200 hover:bg-amber-200 dark:hover:bg-amber-500/30 text-xs font-semibold flex items-center gap-1.5 shrink-0 transition-all cursor-pointer disabled:opacity-50"
                   >
                     <RefreshCw className={`w-3.5 h-3.5 ${refreshingQuote ? 'animate-spin' : ''}`} />
                     <span>Refresh Quote</span>
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center justify-between text-xs text-slate-400 bg-slate-950/60 px-3 py-2 rounded-lg border border-slate-800">
+                <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-950/60 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800">
                   <div className="flex items-center gap-1.5 font-mono">
-                    <Clock className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-                    <span>Quote Locks for: <strong className="text-amber-400">{formatTimer(secondsLeft)}</strong></span>
+                    <Clock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 animate-pulse" />
+                    <span>Quote Locks for: <strong className="text-amber-700 dark:text-amber-400">{formatTimer(secondsLeft)}</strong></span>
                   </div>
                   <button
                     type="button"
                     onClick={handleRefreshQuote}
                     disabled={refreshingQuote}
-                    className="flex items-center gap-1 text-[11px] text-indigo-400 hover:text-indigo-300 font-semibold cursor-pointer disabled:opacity-50"
+                    className="flex items-center gap-1 text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline font-semibold cursor-pointer disabled:opacity-50"
                   >
                     <RefreshCw className={`w-3 h-3 ${refreshingQuote ? 'animate-spin' : ''}`} />
                     <span>Refresh Rate</span>
@@ -346,31 +346,31 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
               )}
 
               {/* Quote Metrics Summary */}
-              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-[10px] uppercase font-semibold text-slate-500">You Pay</span>
-                    <div className="text-lg font-bold text-slate-100 mt-0.5">
-                      {Number(quote.sourceAmount).toLocaleString()} <span className="text-xs font-normal text-slate-400">{quote.sourceCurrency}</span>
+                    <div className="text-lg font-bold text-slate-900 dark:text-slate-100 mt-0.5">
+                      {Number(quote.sourceAmount).toLocaleString()} <span className="text-xs font-normal text-slate-500 dark:text-slate-400">{quote.sourceCurrency}</span>
                     </div>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-slate-600" />
+                  <ArrowRight className="w-5 h-5 text-slate-400 dark:text-slate-600" />
                   <div className="text-right">
                     <span className="text-[10px] uppercase font-semibold text-slate-500">You Receive</span>
-                    <div className="text-lg font-bold text-emerald-400 mt-0.5">
-                      {Number(quote.destinationAmount).toLocaleString()} <span className="text-xs font-normal text-emerald-300">{quote.destinationAsset}</span>
+                    <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+                      {Number(quote.destinationAmount).toLocaleString()} <span className="text-xs font-normal text-emerald-700 dark:text-emerald-300">{quote.destinationAsset}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-slate-800/80 grid grid-cols-2 gap-2 text-xs">
+                <div className="pt-3 border-t border-slate-200 dark:border-slate-800/80 grid grid-cols-2 gap-2 text-xs">
                   <div>
                     <span className="text-slate-500">Exchange Rate:</span>
-                    <span className="font-semibold text-slate-300 block">{Number(quote.exchangeRate).toFixed(6)}</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-300 block">{Number(quote.exchangeRate).toFixed(6)}</span>
                   </div>
                   <div className="text-right">
                     <span className="text-slate-500">Platform Fee:</span>
-                    <span className="font-semibold text-slate-300 block">{Number(quote.fee).toLocaleString()} {quote.sourceCurrency}</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-300 block">{Number(quote.fee).toLocaleString()} {quote.sourceCurrency}</span>
                   </div>
                 </div>
               </div>
@@ -378,11 +378,11 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
               {/* Destination Wallet */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-semibold uppercase text-slate-400 tracking-wider">
+                  <label className="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-400 tracking-wider">
                     Destination Stellar Wallet Address
                   </label>
                   {connectedWalletAddress ? (
-                    <span className="text-[10px] font-medium text-emerald-400 flex items-center gap-1">
+                    <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3" /> Connected
                     </span>
                   ) : (
@@ -392,7 +392,7 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
                         const addr = await connectWallet('freighter');
                         if (addr) setWalletAddress(addr);
                       }}
-                      className="text-[10px] font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 cursor-pointer"
+                      className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer"
                     >
                       <Wallet className="w-3 h-3" /> Connect Wallet
                     </button>
@@ -403,7 +403,7 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
                   value={walletAddress}
                   onChange={(e) => setWalletAddress(e.target.value)}
                   placeholder="GBBD... (56-char Stellar Public Key G...)"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 font-mono"
+                  className="w-full bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-indigo-500 font-mono"
                 />
                 <p className="text-[11px] text-slate-500 mt-1">
                   Settling USDC to this Stellar account via Soroban Vault smart contract.
@@ -413,11 +413,11 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
               {/* Action Buttons: Unauthenticated vs Authenticated */}
               {!isAuthenticated || !token ? (
                 <div className="pt-2 space-y-3">
-                  <div className="p-3 rounded-xl bg-indigo-950/40 border border-indigo-800/60 text-indigo-300 text-xs flex items-center gap-3">
-                    <Lock className="w-5 h-5 text-indigo-400 shrink-0" />
+                  <div className="p-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/60 text-indigo-900 dark:text-indigo-300 text-xs flex items-center gap-3">
+                    <Lock className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
                     <div>
-                      <p className="font-semibold text-slate-200">Account required to complete order</p>
-                      <p className="mt-0.5 text-slate-400">Sign in or create an account to finalize settlement & proceed to deposit.</p>
+                      <p className="font-semibold text-slate-900 dark:text-slate-200">Account required to complete order</p>
+                      <p className="mt-0.5 text-slate-600 dark:text-slate-400">Sign in or create an account to finalize settlement & proceed to deposit.</p>
                     </div>
                   </div>
 
@@ -434,9 +434,9 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
                     <Link
                       href={`/auth/login?mode=register&redirect=${encodeURIComponent(`/orders?quoteId=${quote.id}`)}`}
                       onClick={handleSaveWalletAddress}
-                      className="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 font-semibold text-xs rounded-xl shadow-lg transition-all text-center flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 font-semibold text-xs rounded-xl shadow-lg transition-all text-center flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <UserPlus className="w-4 h-4 text-emerald-400" />
+                      <UserPlus className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                       <span>Create Account</span>
                     </Link>
                   </div>

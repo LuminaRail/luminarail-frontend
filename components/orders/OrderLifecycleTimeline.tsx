@@ -123,21 +123,21 @@ export function OrderLifecycleTimeline({ order }: OrderLifecycleTimelineProps) {
   return (
     <div className="w-full py-4">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">Order Lifecycle State</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Order Lifecycle State</h3>
         <span
           className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded border ${
             orderCompleted
-              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+              ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-400'
               : isFailedOrder
-              ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-              : 'bg-indigo-500/10 border-indigo-500/30 text-indigo-400'
+              ? 'bg-rose-50 dark:bg-rose-500/10 border-rose-200 dark:border-rose-500/30 text-rose-700 dark:text-rose-400'
+              : 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-200 dark:border-indigo-500/30 text-indigo-700 dark:text-indigo-400'
           }`}
         >
           {status}
         </span>
       </div>
 
-      <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-800">
+      <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
         {steps.map((step) => {
           return (
             <div key={step.key} className="relative flex items-start group">
@@ -145,12 +145,12 @@ export function OrderLifecycleTimeline({ order }: OrderLifecycleTimelineProps) {
               <div
                 className={`absolute -left-6 top-0.5 w-5 h-5 rounded-full flex items-center justify-center text-[10px] transition-all ${
                   step.isFailed
-                    ? 'bg-rose-600 text-white shadow-lg shadow-rose-900/50 ring-2 ring-rose-500/40'
+                    ? 'bg-rose-600 text-white shadow-lg ring-2 ring-rose-500/40'
                     : step.isCompleted
-                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-950/40'
+                    ? 'bg-emerald-600 text-white shadow-md'
                     : step.isCurrent
                     ? 'bg-indigo-600 text-white ring-4 ring-indigo-500/20 shadow-md animate-pulse'
-                    : 'bg-slate-800 text-slate-500 border border-slate-700'
+                    : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-300 dark:border-slate-700'
                 }`}
               >
                 {step.isFailed ? (
@@ -160,7 +160,7 @@ export function OrderLifecycleTimeline({ order }: OrderLifecycleTimelineProps) {
                 ) : step.isCurrent ? (
                   <Clock className="w-3 h-3 animate-spin-slow" />
                 ) : (
-                  <span className="w-1.5 h-1.5 rounded-full bg-slate-600" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-600" />
                 )}
               </div>
 
@@ -170,23 +170,23 @@ export function OrderLifecycleTimeline({ order }: OrderLifecycleTimelineProps) {
                   <span
                     className={`text-sm font-semibold tracking-tight ${
                       step.isFailed
-                        ? 'text-rose-400'
+                        ? 'text-rose-600 dark:text-rose-400'
                         : step.isCompleted
-                        ? 'text-slate-100'
+                        ? 'text-slate-900 dark:text-slate-100'
                         : step.isCurrent
-                        ? 'text-indigo-400'
-                        : 'text-slate-500'
+                        ? 'text-indigo-600 dark:text-indigo-400'
+                        : 'text-slate-400 dark:text-slate-500'
                     }`}
                   >
                     {step.label}
                   </span>
                   {step.isCurrent && !step.isFailed && (
-                    <span className="text-[10px] font-mono font-medium px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                    <span className="text-[10px] font-mono font-medium px-1.5 py-0.2 rounded bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30">
                       Active Step
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-slate-400 mt-0.5">{step.description}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{step.description}</p>
               </div>
             </div>
           );

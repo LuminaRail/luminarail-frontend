@@ -44,7 +44,7 @@ export default function QuotesPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col overflow-x-hidden">
+    <div className="relative min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col overflow-x-hidden transition-colors duration-200">
       {/* Background Grid Scan animation */}
       <GridScan scanColor="#15e113" opacity={0.85} gridScale={45} scanSpeed={1.0} scanHeight={160} />
 
@@ -53,32 +53,32 @@ export default function QuotesPage() {
 
       <main className="mx-auto max-w-5xl px-4 py-10">
         <div className="mb-8">
-          <p className="mb-2 text-sm font-medium text-indigo-400">
+          <p className="mb-2 text-sm font-medium text-indigo-600 dark:text-indigo-400">
             LuminaRail
           </p>
 
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
             Get a settlement quote
           </h1>
 
-          <p className="mt-2 text-slate-400">
+          <p className="mt-2 text-slate-600 dark:text-slate-400">
             Get a live quote for converting NGN into Stellar USDC.
           </p>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-            <h2 className="mb-5 text-lg font-semibold">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xl backdrop-blur-md">
+            <h2 className="mb-5 text-lg font-semibold text-slate-900 dark:text-slate-100">
               Request quote
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="mb-2 block text-sm text-slate-400">
+                <label className="mb-2 block text-sm text-slate-600 dark:text-slate-400 font-medium">
                   {side === 'source' ? 'You are paying' : 'You receive'}
                 </label>
 
-                <div className="flex overflow-hidden rounded-xl border border-slate-700 bg-slate-950">
+                <div className="flex overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-950">
                   <input
                     type="number"
                     min="1"
@@ -89,10 +89,10 @@ export default function QuotesPage() {
                       if (currentQuote) clearQuote();
                     }}
                     placeholder={side === 'source' ? '100000' : '100'}
-                    className="min-w-0 flex-1 bg-transparent px-4 py-4 text-lg outline-none"
+                    className="min-w-0 flex-1 bg-transparent px-4 py-4 text-lg outline-none text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 font-bold"
                   />
 
-                  <div className="flex items-center gap-2 border-l border-slate-700 px-4 font-semibold">
+                  <div className="flex items-center gap-2 border-l border-slate-200 dark:border-slate-700 px-4 font-semibold text-slate-700 dark:text-slate-200">
                     {side === 'source' ? (
                       <>
                         <img
@@ -117,25 +117,25 @@ export default function QuotesPage() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm text-slate-400">
+                <label className="mb-2 block text-sm text-slate-600 dark:text-slate-400 font-medium">
                   Settlement asset
                 </label>
 
-                <div className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 flex items-center gap-3">
+                <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-950 px-4 py-3 flex items-center gap-3">
                   <img
                     src="/assets/usdc.svg"
                     alt="USDC"
                     className="w-6 h-6 rounded-full shrink-0"
                   />
                   <div>
-                    <div className="font-semibold text-sm">USDC</div>
+                    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">USDC</div>
                     <div className="text-xs text-slate-500">Stellar Testnet</div>
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="mb-2 block text-sm text-slate-400">
+                <label className="mb-2 block text-sm text-slate-600 dark:text-slate-400 font-medium">
                   Quote direction
                 </label>
 
@@ -147,19 +147,19 @@ export default function QuotesPage() {
                     );
                     if (currentQuote) clearQuote();
                   }}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 outline-none"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-950 px-4 py-3 outline-none text-slate-900 dark:text-slate-100 font-medium"
                 >
-                  <option value="source">
+                  <option value="source" className="bg-white dark:bg-slate-900">
                     I enter the NGN amount
                   </option>
-                  <option value="destination">
+                  <option value="destination" className="bg-white dark:bg-slate-900">
                     I want a specific USDC amount
                   </option>
                 </select>
               </div>
 
               {error && (
-                <div className="rounded-xl border border-rose-900 bg-rose-950/40 p-4 text-sm text-rose-300">
+                <div className="rounded-xl border border-rose-200 dark:border-rose-900 bg-rose-50 dark:bg-rose-950/40 p-4 text-sm text-rose-700 dark:text-rose-300">
                   {error}
                 </div>
               )}
@@ -167,25 +167,25 @@ export default function QuotesPage() {
               <button
                 type="submit"
                 disabled={loading || !amount || Number(amount) <= 0}
-                className="w-full rounded-xl bg-indigo-600 px-4 py-3 font-semibold transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full rounded-xl bg-indigo-600 px-4 py-3 font-semibold text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer shadow-md"
               >
                 {loading ? 'Getting quote...' : 'Get quote'}
               </button>
             </form>
           </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-            <h2 className="mb-5 text-lg font-semibold">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xl backdrop-blur-md">
+            <h2 className="mb-5 text-lg font-semibold text-slate-900 dark:text-slate-100">
               Quote details
             </h2>
 
             {!currentQuote ? (
-              <div className="flex min-h-64 items-center justify-center rounded-xl border border-dashed border-slate-700 text-center text-sm text-slate-500">
+              <div className="flex min-h-64 items-center justify-center rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-center text-sm text-slate-500">
                 Enter an amount and request a quote.
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="rounded-xl bg-slate-950 p-5">
+                <div className="rounded-xl bg-slate-100 dark:bg-slate-950 p-5">
                   <p className="text-sm text-slate-500">
                     You pay
                   </p>
@@ -196,17 +196,17 @@ export default function QuotesPage() {
                       alt={currentQuote.sourceCurrency}
                       className="w-5 h-5 rounded-full shrink-0"
                     />
-                    <p className="text-2xl font-bold">
+                    <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                       {formatAmount(currentQuote.sourceAmount)}{' '}
-                      <span className="text-base text-slate-400">
+                      <span className="text-base text-slate-500 dark:text-slate-400">
                         {currentQuote.sourceCurrency}
                       </span>
                     </p>
                   </div>
                 </div>
 
-                <div className="rounded-xl bg-indigo-950/40 p-5">
-                  <p className="text-sm text-slate-400">
+                <div className="rounded-xl bg-indigo-50 dark:bg-indigo-950/40 p-5 border border-indigo-200 dark:border-indigo-900/50">
+                  <p className="text-sm text-indigo-700 dark:text-slate-400">
                     You receive
                   </p>
 
@@ -216,7 +216,7 @@ export default function QuotesPage() {
                       alt="Destination Asset"
                       className="w-6 h-6 rounded-full shrink-0"
                     />
-                    <p className="text-3xl font-bold text-indigo-300">
+                    <p className="text-3xl font-bold text-indigo-700 dark:text-indigo-300">
                       {formatAmount(currentQuote.destinationAmount ?? currentQuote.targetAmount ?? 0)}{' '}
                       <span className="text-base font-semibold">
                         {currentQuote.destinationAsset ?? currentQuote.targetCurrency ?? 'USDC'}
@@ -225,12 +225,12 @@ export default function QuotesPage() {
                   </div>
                 </div>
 
-                <div className="space-y-3 border-t border-slate-800 pt-4 text-sm">
+                <div className="space-y-3 border-t border-slate-200 dark:border-slate-800 pt-4 text-sm text-slate-700 dark:text-slate-300">
                   <div className="flex justify-between">
                     <span className="text-slate-500">
                       Exchange rate
                     </span>
-                    <span>
+                    <span className="font-semibold">
                       {formatAmount(currentQuote.exchangeRate)}
                     </span>
                   </div>
@@ -239,7 +239,7 @@ export default function QuotesPage() {
                     <span className="text-slate-500">
                       Fee
                     </span>
-                    <span>
+                    <span className="font-semibold">
                       {formatAmount(currentQuote.fee ?? currentQuote.feeAmount ?? 0)}{' '}
                       {currentQuote.sourceCurrency}
                     </span>
@@ -249,7 +249,7 @@ export default function QuotesPage() {
                     <span className="text-slate-500">
                       Provider
                     </span>
-                    <span className="text-xs">
+                    <span className="text-xs font-semibold">
                       {currentQuote.provider}
                     </span>
                   </div>
@@ -258,7 +258,7 @@ export default function QuotesPage() {
                     <span className="text-slate-500">
                       Expires
                     </span>
-                    <span>
+                    <span className="font-mono text-xs">
                       {new Date(
                         currentQuote.expiresAt
                       ).toLocaleTimeString()}
@@ -268,7 +268,7 @@ export default function QuotesPage() {
 
                 <Link
                   href={`/orders?quoteId=${currentQuote.id}`}
-                  className="block w-full text-center rounded-xl border border-indigo-500/50 bg-indigo-500/10 px-4 py-3 font-semibold text-indigo-300 transition hover:bg-indigo-500/20"
+                  className="block w-full text-center rounded-xl border border-indigo-500/50 bg-indigo-600 text-white dark:bg-indigo-500/10 dark:text-indigo-300 px-4 py-3 font-semibold transition hover:bg-indigo-500 dark:hover:bg-indigo-500/20"
                 >
                   Continue to settlement
                 </Link>
