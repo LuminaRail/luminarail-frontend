@@ -35,6 +35,19 @@ export type PaymentStatus =
 
 export type { Quote };
 
+export interface PaymentInstruction {
+  bankName?: string;
+  accountNumber?: string;
+  accountName?: string;
+  reference: string;
+  amount?: string;
+  currency?: string;
+  paymentUrl?: string;
+  qrCodeUrl?: string;
+  instructions?: string;
+  expiresAt?: string;
+}
+
 export interface Payment {
   id: string;
   orderId: string;
@@ -51,6 +64,8 @@ export interface Payment {
   status: PaymentStatus;
   reference: string;
   idempotencyKey?: string | null;
+  instructions?: PaymentInstruction | null;
+  metadata?: Record<string, any> | null;
   createdAt: string;
   updatedAt?: string;
 }
@@ -128,4 +143,5 @@ export interface CreatePaymentInput {
   orderId: string;
   currency?: string;
   type?: 'DEPOSIT' | 'PAYMENT' | 'PAYOUT' | 'REFUND';
+  provider?: string;
 }

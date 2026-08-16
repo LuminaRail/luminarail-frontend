@@ -6,10 +6,11 @@ import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { useAuth } from '@/context/AuthContext';
 import { useOrders } from '@/hooks/useOrders';
-import { Order, OrderStatus } from '@/types/orders';
+import { Order, OrderStatus, Payment } from '@/types/orders';
 import { OrderSummaryCards } from '@/components/orders/OrderSummaryCards';
 import { OrderDetailsModal } from '@/components/orders/OrderDetailsModal';
 import { CreateOrderModal } from '@/components/orders/CreateOrderModal';
+import { NgnPaymentModal } from '@/components/payments/NgnPaymentModal';
 import { GridScan } from '@/components/backgrounds/GridScan';
 import {
   Plus,
@@ -48,6 +49,10 @@ function OrdersContent() {
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
   const [isCreateOpen, setIsCreateOpen] = useState<boolean>(!!quoteIdFromQuery);
 
+  const [selectedNgnOrder, setSelectedNgnOrder] = useState<Order | null>(null);
+  const [selectedNgnPayment, setSelectedNgnPayment] = useState<Payment | null>(null);
+  const [isNgnModalOpen, setIsNgnModalOpen] = useState<boolean>(false);
+
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
 
@@ -68,6 +73,13 @@ function OrdersContent() {
     setIsDetailsOpen(true);
   };
 
+  const handleOpenNgnModal = (order: Order, payment?: Payment) => {
+    const pmt = payment || order.payments?.[0] || null;
+    setSelectedNgnOrder(order);
+    setSelectedNgnPayment(pmt);
+    setIsNgnModalOpen(true);
+  };
+
   const handleRefreshSelectedOrder = async () => {
     if (selectedOrder) {
       const updated = await fetchOrderDetails(selectedOrder.id);
@@ -76,10 +88,14 @@ function OrdersContent() {
     }
   };
 
-  const handleOrderCreated = (newOrder: Order) => {
-    setSelectedOrder(newOrder);
-    setIsDetailsOpen(true);
-    // Remove query param
+  const handleOrderCreated = (newOrder: Order, newPayment?: Payment) => {
+    fetchOrders(0, limit, true);
+    if (newPayment) {
+      handleOpenNgnModal(newOrder, newPayment);
+    } else {
+      setSelectedOrder(newOrder);
+      setIsDetailsOpen(true);
+    }
     router.replace('/orders');
   };
 
@@ -352,12 +368,22 @@ function OrdersContent() {
                             })}
                           </td>
                           <td className="py-4 px-4 text-right" onClick={(e) => e.stopPropagation()}>
-                            <button
-                              onClick={() => handleOpenDetails(ord.id)}
-                              className="py-1.5 px-3 bg-slate-800 hover:bg-emerald-600/20 hover:text-emerald-400 text-slate-300 rounded-lg text-xs font-semibold transition-all border border-slate-700 hover:border-emerald-500/40"
-                            >
-                              View Details
-                            </button>
+                            <div className="flex items-center justify-end gap-2">
+                              {(ord.status === 'CREATED' || ord.status === 'AWAITING_PAYMENT') && ord.sourceCurrency === 'NGN' && (
+                                <button
+                                  onClick={() => handleOpenNgnModal(ord)}
+                                  className="py-1.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition-all shadow cursor-pointer"
+                                >
+                                  Pay NGN
+                                </button>
+                              )}
+                              <button
+                                onClick={() => handleOpenDetails(ord.id)}
+                                className="py-1.5 px-3 bg-slate-800 hover:bg-emerald-600/20 hover:text-emerald-400 text-slate-300 rounded-lg text-xs font-semibold transition-all border border-slate-700 hover:border-emerald-500/40 cursor-pointer"
+                              >
+                                View Details
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -458,6 +484,17 @@ function OrdersContent() {
           router.replace('/orders');
         }}
         onOrderCreated={handleOrderCreated}
+      />
+
+      <NgnPaymentModal
+        isOpen={isNgnModalOpen}
+        onClose={() => setIsNgnModalOpen(false)}
+        order={selectedNgnOrder}
+        payment={selectedNgnPayment}
+        onPaymentUpdated={(updatedPayment) => {
+          setSelectedNgnPayment(updatedPayment);
+          fetchOrders(offset, limit, true);
+        }}
       />
       </div>
     </div>

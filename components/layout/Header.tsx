@@ -19,7 +19,12 @@ export function Header() {
     { href: '/#how-it-works', label: 'How it works' },
     { href: '/quotes', label: 'Quotes' },
     { href: '/orders', label: 'Orders' },
-    ...(isAuthenticated ? [{ href: '/dashboard', label: 'Dashboard' }] : []),
+    ...(isAuthenticated
+      ? [
+          { href: '/dashboard', label: 'Dashboard' },
+          { href: '/transactions', label: 'Transactions' },
+        ]
+      : []),
     { href: '/#developers', label: 'Developers' },
   ];
 

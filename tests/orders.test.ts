@@ -214,4 +214,61 @@ describe('Frontend Orders, Payments & Settlements Services Unit Tests', () => {
     expect(ApiClient.post).toHaveBeenCalledWith('/orders', payload, 'mock_token');
     expect(res.data?.walletAddress).toBe(validAddress);
   });
+
+  it('PaymentsService.createPayment supports NGN_BANK_TRANSFER provider and returns virtual bank instructions', async () => {
+    const mockData = {
+      status: 'success',
+      success: true,
+      data: {
+        id: 'pmt_ngn_1',
+        orderId: 'ord_ngn_1',
+        userId: 'usr_1',
+        provider: 'NGN_BANK_TRANSFER',
+        type: 'DEPOSIT',
+        amount: '150000',
+        currency: 'NGN',
+        status: 'PENDING',
+        reference: 'PAY_NGN_123',
+        instructions: {
+          bankName: 'Providus Bank / LuminaRail Rail',
+          accountNumber: '9982014821',
+          accountName: 'LuminaRail On-Ramp Vault',
+          reference: 'PAY_NGN_123',
+          amount: '150000.00',
+          currency: 'NGN',
+          instructions: 'Transfer exact amount using your bank app.',
+        },
+        createdAt: '2026-08-15T10:00:00Z',
+      },
+    };
+
+    (ApiClient.post as ReturnType<typeof vi.fn>).mockResolvedValue(mockData);
+
+    const payload = { orderId: 'ord_ngn_1', currency: 'NGN', provider: 'NGN_BANK_TRANSFER' };
+    const res = await PaymentsService.createPayment(payload, 'mock_token');
+
+    expect(ApiClient.post).toHaveBeenCalledWith('/payments', payload, 'mock_token');
+    expect(res.data?.provider).toBe('NGN_BANK_TRANSFER');
+    expect(res.data?.instructions?.bankName).toContain('Providus');
+    expect(res.data?.instructions?.accountNumber).toBe('9982014821');
+  });
+
+  it('PaymentsService.verifyPayment supports sandbox simulation payload', async () => {
+    const mockData = {
+      status: 'success',
+      success: true,
+      data: {
+        id: 'pmt_ngn_1',
+        orderId: 'ord_ngn_1',
+        status: 'SUCCEEDED',
+      },
+    };
+
+    (ApiClient.post as ReturnType<typeof vi.fn>).mockResolvedValue(mockData);
+
+    const res = await PaymentsService.verifyPayment('pmt_ngn_1', { simulateSuccess: true }, 'mock_token');
+
+    expect(ApiClient.post).toHaveBeenCalledWith('/payments/pmt_ngn_1/verify', { simulateSuccess: true }, 'mock_token');
+    expect(res.data?.status).toBe('SUCCEEDED');
+  });
 });
