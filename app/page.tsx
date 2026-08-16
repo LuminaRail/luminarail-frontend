@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Header } from '@/components/layout/Header';
 import { GridScan } from '@/components/backgrounds/GridScan';
+import { HeroMobileMockup } from '@/components/landing/HeroMobileMockup';
 import {
   ArrowRight,
   Check,
@@ -69,112 +70,9 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Right Column: Settlement Architecture Visualization */}
-              <div className="lg:col-span-5">
-                <div className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0c101c] p-6 space-y-4 font-mono text-xs shadow-sm dark:shadow-2xl">
-                  <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 text-slate-600 dark:text-slate-400">
-                    <span className="font-semibold text-slate-900 dark:text-slate-200 uppercase tracking-wider font-sans text-xs">
-                      Settlement Engine
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      OPERATIONAL
-                    </span>
-                  </div>
-
-                  {/* Flow Diagram */}
-                  <div className="space-y-3 pt-1">
-                    {/* Node 1: NGN Local Fiat */}
-                    <div className="p-3.5 rounded border border-slate-200 dark:border-slate-800/90 bg-white dark:bg-[#121622] flex items-center justify-between">
-                      <div>
-                        <div className="text-[10px] text-slate-500 uppercase tracking-widest font-sans font-medium">
-                          Local Fiat
-                        </div>
-                        <div className="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5 font-sans">
-                          NGN Deposit
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-slate-800 dark:text-slate-200 font-mono text-xs font-semibold">250,000.00 NGN</span>
-                        <div className="text-[10px] text-emerald-600 dark:text-emerald-400">Bank Webhook Verified</div>
-                      </div>
-                    </div>
-
-                    {/* Down Arrow / Connector */}
-                    <div className="flex items-center justify-between px-4 text-slate-400 dark:text-slate-600">
-                      <div className="h-4 w-px bg-slate-300 dark:bg-slate-800 mx-auto" />
-                      <span className="text-[10px] font-mono text-slate-500 uppercase">Rate Lock: 1,578.00</span>
-                      <div className="h-4 w-px bg-slate-300 dark:bg-slate-800 mx-auto" />
-                    </div>
-
-                    {/* Node 2: LuminaRail Settlement Engine */}
-                    <div className="p-3.5 rounded border border-emerald-300 dark:border-emerald-900/60 bg-emerald-50/50 dark:bg-[#111c1b] flex items-center justify-between">
-                      <div>
-                        <div className="text-[10px] text-emerald-700 dark:text-emerald-400 uppercase tracking-widest font-sans font-medium">
-                          Settlement Engine
-                        </div>
-                        <div className="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5 font-sans">
-                          LuminaRail Core
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-slate-600 dark:text-slate-400 text-[10px]">FX Engine & Escrow</span>
-                        <div className="text-[10px] text-slate-800 dark:text-slate-200 font-mono">Order #ORD-9482</div>
-                      </div>
-                    </div>
-
-                    {/* Down Arrow / Connector */}
-                    <div className="flex items-center justify-between px-4 text-slate-400 dark:text-slate-600">
-                      <div className="h-4 w-px bg-slate-300 dark:bg-slate-800 mx-auto" />
-                      <span className="text-[10px] font-mono text-slate-500 uppercase">Soroban Smart Contract</span>
-                      <div className="h-4 w-px bg-slate-300 dark:bg-slate-800 mx-auto" />
-                    </div>
-
-                    {/* Node 3: USDC Stablecoin */}
-                    <div className="p-3.5 rounded border border-slate-200 dark:border-slate-800/90 bg-white dark:bg-[#121622] flex items-center justify-between">
-                      <div>
-                        <div className="text-[10px] text-slate-500 uppercase tracking-widest font-sans font-medium">
-                          Stablecoin
-                        </div>
-                        <div className="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5 font-sans">
-                          USDC Asset
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-emerald-700 dark:text-emerald-300 font-mono text-xs font-semibold">158.423839 USDC</span>
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400">Trustline Verified</div>
-                      </div>
-                    </div>
-
-                    {/* Down Arrow / Connector */}
-                    <div className="flex items-center justify-between px-4 text-slate-400 dark:text-slate-600">
-                      <div className="h-4 w-px bg-slate-300 dark:bg-slate-800 mx-auto" />
-                      <span className="text-[10px] font-mono text-slate-500 uppercase">On-Chain Finality</span>
-                      <div className="h-4 w-px bg-slate-300 dark:bg-slate-800 mx-auto" />
-                    </div>
-
-                    {/* Node 4: Stellar Network */}
-                    <div className="p-3.5 rounded border border-slate-200 dark:border-slate-800/90 bg-white dark:bg-[#121622] flex items-center justify-between">
-                      <div>
-                        <div className="text-[10px] text-slate-500 uppercase tracking-widest font-sans font-medium">
-                          Settlement Network
-                        </div>
-                        <div className="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5 font-sans">
-                          Stellar Ledger
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-emerald-600 dark:text-emerald-400 font-mono text-xs font-semibold">Confirmed (~3.4s)</span>
-                        <div className="text-[10px] text-slate-500">Soroban Contract c9a4...</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-200 dark:border-slate-800 text-[10px] text-slate-500 flex justify-between font-sans">
-                    <span>Protocol: Stellar Horizon / Soroban</span>
-                    <span className="font-mono text-slate-600 dark:text-slate-400">Fee: 0.00001 XLM</span>
-                  </div>
-                </div>
+              {/* Right Column: Interactive Mobile Mockup */}
+              <div className="lg:col-span-5 flex justify-center">
+                <HeroMobileMockup />
               </div>
 
             </div>
