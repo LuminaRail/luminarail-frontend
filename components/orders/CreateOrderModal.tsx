@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { StrKey } from '@stellar/stellar-sdk';
 import { Quote, Order, Payment } from '@/types/orders';
 import { QuotesService } from '@/services/quotes';
 import { OrdersService } from '@/services/orders';
@@ -9,6 +8,22 @@ import { PaymentsService } from '@/services/payments';
 import { useStellarWallet } from '@/hooks/useStellarWallet';
 import { useAuth } from '@/context/AuthContext';
 import { X, ShieldCheck, ArrowRight, Loader2, Wallet, AlertCircle, CheckCircle2, Clock, RefreshCw } from 'lucide-react';
+
+async function validateStellarAddress(address: string): Promise<boolean> {
+  if (!address || typeof address !== 'string') return false;
+  const trimmed = address.trim();
+  if (!/^G[A-Z2-7]{55}$/.test(trimmed)) return false;
+
+  if (typeof window !== 'undefined') {
+    try {
+      const { StrKey } = await import('@stellar/stellar-sdk');
+      return StrKey.isValidEd25519PublicKey(trimmed);
+    } catch {
+      return true;
+    }
+  }
+  return true;
+}
 
 interface CreateOrderModalProps {
   quoteId: string | null;
@@ -146,7 +161,8 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
       return;
     }
 
-    if (!StrKey.isValidEd25519PublicKey(trimmedAddress)) {
+    const isValidAddr = await validateStellarAddress(trimmedAddress);
+    if (!isValidAddr) {
       setError('Invalid Stellar destination address format. Address must be a 56-character ed25519 public key starting with "G".');
       return;
     }
