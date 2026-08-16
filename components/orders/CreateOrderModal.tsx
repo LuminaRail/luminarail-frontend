@@ -8,7 +8,7 @@ import { OrdersService } from '@/services/orders';
 import { PaymentsService } from '@/services/payments';
 import { useStellarWallet } from '@/hooks/useStellarWallet';
 import { useAuth } from '@/context/AuthContext';
-import { X, ShieldCheck, ArrowRight, Loader2, Wallet, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { X, ShieldCheck, ArrowRight, Loader2, Wallet, AlertCircle, CheckCircle2, Clock, RefreshCw } from 'lucide-react';
 
 interface CreateOrderModalProps {
   quoteId: string | null;
@@ -26,8 +26,10 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
   const [orderType, setOrderType] = useState<'ON_RAMP' | 'OFF_RAMP'>('ON_RAMP');
 
   const [loadingQuote, setLoadingQuote] = useState<boolean>(false);
+  const [refreshingQuote, setRefreshingQuote] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -62,11 +64,81 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
     fetchQuote();
   }, [quoteId, isOpen]);
 
+  // Live Quote Expiration Countdown Timer
+  useEffect(() => {
+    if (!quote || !quote.expiresAt) {
+      setSecondsLeft(null);
+      return;
+    }
+
+    const calcSeconds = () => {
+      const expiresTime = new Date(quote.expiresAt).getTime();
+      const diff = Math.max(0, Math.ceil((expiresTime - Date.now()) / 1000));
+      return diff;
+    };
+
+    setSecondsLeft(calcSeconds());
+
+    const interval = setInterval(() => {
+      const remaining = calcSeconds();
+      setSecondsLeft(remaining);
+      if (remaining <= 0) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [quote]);
+
+  const isExpired =
+    quote?.status === 'EXPIRED' ||
+    (secondsLeft !== null && secondsLeft <= 0) ||
+    (quote?.expiresAt ? new Date(quote.expiresAt).getTime() <= Date.now() : false);
+
+  const formatTimer = (seconds: number | null) => {
+    if (seconds === null) return '';
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleRefreshQuote = async () => {
+    if (!quote) return;
+    setRefreshingQuote(true);
+    setError(null);
+    try {
+      const response = await QuotesService.createQuote(
+        {
+          sourceCurrency: quote.sourceCurrency || 'NGN',
+          destinationAsset: quote.destinationAsset || 'USDC',
+          amount: Number(quote.sourceAmount || 10000),
+          side: 'source',
+        },
+        token || undefined
+      );
+
+      if (response.success && response.data) {
+        setQuote(response.data);
+      } else {
+        setError(response.message || 'Failed to refresh quote.');
+      }
+    } catch (err) {
+      setError('Failed to refresh quote metrics.');
+    } finally {
+      setRefreshingQuote(false);
+    }
+  };
+
   if (!isOpen) return null;
 
   const handleCreateOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!quote || !token) return;
+
+    if (isExpired) {
+      setError('Quote has expired. Please refresh to lock in current rate.');
+      return;
+    }
 
     const trimmedAddress = walletAddress.trim();
     if (!trimmedAddress) {
@@ -145,7 +217,7 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
               <p className="text-xs text-slate-400">Review quote metrics and specify destination wallet</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1">
+          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -157,17 +229,78 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
               <Loader2 className="w-6 h-6 animate-spin text-indigo-400" />
               <p className="text-xs">Loading quote metrics...</p>
             </div>
-          ) : error ? (
-            <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex items-center gap-3">
-              <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
-              <div>
-                <p className="font-semibold">Unable to process quote</p>
-                <p className="mt-0.5">{error}</p>
+          ) : !quote && error ? (
+            <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
+                <div>
+                  <p className="font-semibold">Unable to process quote</p>
+                  <p className="mt-0.5">{error}</p>
+                </div>
               </div>
             </div>
           ) : quote ? (
             <form onSubmit={handleCreateOrder} className="space-y-5">
               
+              {/* Error Banner with Refresh Action */}
+              {error && (
+                <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                    <div>
+                      <p className="font-semibold">Unable to process quote</p>
+                      <p className="mt-0.5">{error}</p>
+                    </div>
+                  </div>
+                  {(error.toLowerCase().includes('expired') || isExpired) && (
+                    <button
+                      type="button"
+                      onClick={handleRefreshQuote}
+                      disabled={refreshingQuote}
+                      className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-semibold text-xs shrink-0 flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${refreshingQuote ? 'animate-spin' : ''}`} />
+                      <span>Refresh Quote</span>
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* Quote Expiry / Refresh Indicator */}
+              {isExpired ? (
+                <div className="p-3.5 rounded-xl bg-amber-950/40 border border-amber-800/80 text-amber-300 text-xs flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span>Quote has expired. Refresh to lock in latest rate.</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleRefreshQuote}
+                    disabled={refreshingQuote}
+                    className="px-3 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-200 hover:bg-amber-500/30 text-xs font-semibold flex items-center gap-1.5 shrink-0 transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${refreshingQuote ? 'animate-spin' : ''}`} />
+                    <span>Refresh Quote</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between text-xs text-slate-400 bg-slate-950/60 px-3 py-2 rounded-lg border border-slate-800">
+                  <div className="flex items-center gap-1.5 font-mono">
+                    <Clock className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                    <span>Quote Locks for: <strong className="text-amber-400">{formatTimer(secondsLeft)}</strong></span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleRefreshQuote}
+                    disabled={refreshingQuote}
+                    className="flex items-center gap-1 text-[11px] text-indigo-400 hover:text-indigo-300 font-semibold cursor-pointer disabled:opacity-50"
+                  >
+                    <RefreshCw className={`w-3 h-3 ${refreshingQuote ? 'animate-spin' : ''}`} />
+                    <span>Refresh Rate</span>
+                  </button>
+                </div>
+              )}
+
               {/* Quote Metrics Summary */}
               <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
@@ -235,20 +368,41 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
 
               {/* Submit Button */}
               <div className="pt-2">
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Creating Settlement Order...</span>
-                    </>
-                  ) : (
-                    <span>Create Settlement Order & Proceed to Deposit</span>
-                  )}
-                </button>
+                {isExpired ? (
+                  <button
+                    type="button"
+                    onClick={handleRefreshQuote}
+                    disabled={refreshingQuote}
+                    className="w-full py-3 px-4 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white font-semibold text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    {refreshingQuote ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Refreshing Quote Rate...</span>
+                      </>
+                    ) : (
+                      <>
+                        <RefreshCw className="w-4 h-4" />
+                        <span>Quote Expired — Refresh Quote Rate</span>
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={submitting || refreshingQuote}
+                    className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Creating Settlement Order...</span>
+                      </>
+                    ) : (
+                      <span>Create Settlement Order & Proceed to Deposit</span>
+                    )}
+                  </button>
+                )}
               </div>
 
             </form>
