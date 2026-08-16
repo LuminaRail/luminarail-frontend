@@ -1,16 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { useAuth } from '@/context/AuthContext';
 import { AlertCircle, CheckCircle2, Loader2, Lock, Mail, Phone, UserCheck, ShieldCheck } from 'lucide-react';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTarget = searchParams.get('redirect') || '/orders';
+  const initialMode = searchParams.get('mode') === 'register' ? 'register' : 'login';
+
   const { login, register, isAuthenticated, error, clearError } = useAuth();
 
-  const [mode, setMode] = useState<'login' | 'register'>('login');
+  const [mode, setMode] = useState<'login' | 'register'>(initialMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
@@ -21,10 +25,17 @@ export default function LoginPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/orders');
+    const searchMode = searchParams.get('mode');
+    if (searchMode === 'register' || searchMode === 'login') {
+      setMode(searchMode);
     }
-  }, [isAuthenticated, router]);
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push(redirectTarget);
+    }
+  }, [isAuthenticated, router, redirectTarget]);
 
   const handleToggleMode = (newMode: 'login' | 'register') => {
     setMode(newMode);
@@ -62,7 +73,7 @@ export default function LoginPage() {
         if (ok) {
           setSuccessMessage('Authentication successful! Redirecting...');
           setTimeout(() => {
-            router.push('/orders');
+            router.push(redirectTarget);
           }, 800);
         }
       } else {
@@ -75,7 +86,7 @@ export default function LoginPage() {
         if (ok) {
           setSuccessMessage('Account created successfully! Redirecting...');
           setTimeout(() => {
-            router.push('/orders');
+            router.push(redirectTarget);
           }, 800);
         }
       }
@@ -98,24 +109,26 @@ export default function LoginPage() {
           {/* Header & Tabs */}
           <div className="text-center mb-6">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mb-3">
-              <ShieldCheck className="w-6 h-6" />
+              <Lock className="w-6 h-6" />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
-              {mode === 'login' ? 'Sign In to LuminaRail' : 'Create Account'}
+            <h1 className="text-2xl font-bold text-slate-100">
+              {mode === 'login' ? 'Sign In to LuminaRail' : 'Create LuminaRail Account'}
             </h1>
             <p className="text-xs text-slate-400 mt-1">
-              Access modular settlement rails for Stellar & local fiat.
+              {mode === 'login'
+                ? 'Access non-custodial fiat settlement & Soroban liquidity rails'
+                : 'Register as a User or Merchant to start settling digital assets'}
             </p>
           </div>
 
-          {/* Toggle Pills */}
-          <div className="grid grid-cols-2 p-1 bg-slate-950/60 rounded-lg border border-slate-800/60 mb-6">
+          {/* Mode Switcher */}
+          <div className="grid grid-cols-2 gap-1 p-1 bg-slate-950 border border-slate-800 rounded-xl mb-6 text-xs font-semibold">
             <button
               type="button"
               onClick={() => handleToggleMode('login')}
-              className={`py-2 text-xs font-semibold rounded-md transition-all ${
+              className={`py-2 rounded-lg transition-all ${
                 mode === 'login'
-                  ? 'bg-emerald-600 text-white shadow-md'
+                  ? 'bg-indigo-600 text-white shadow-md'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -124,9 +137,9 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => handleToggleMode('register')}
-              className={`py-2 text-xs font-semibold rounded-md transition-all ${
+              className={`py-2 rounded-lg transition-all ${
                 mode === 'register'
-                  ? 'bg-emerald-600 text-white shadow-md'
+                  ? 'bg-indigo-600 text-white shadow-md'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -134,53 +147,53 @@ export default function LoginPage() {
             </button>
           </div>
 
-          {/* Alert Banners */}
+          {/* Alerts */}
           {activeError && (
-            <div className="mb-4 p-3 rounded-lg bg-rose-950/40 border border-rose-800/50 text-rose-300 text-xs flex items-start gap-2 animate-fadeIn">
-              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-              <div className="flex-1">{activeError}</div>
+            <div className="mb-5 p-3.5 rounded-xl bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex items-center gap-2.5">
+              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+              <span>{activeError}</span>
             </div>
           )}
 
           {successMessage && (
-            <div className="mb-4 p-3 rounded-lg bg-emerald-950/40 border border-emerald-800/50 text-emerald-300 text-xs flex items-center gap-2 animate-fadeIn">
+            <div className="mb-5 p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-800 text-emerald-300 text-xs flex items-center gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <div>{successMessage}</div>
+              <span>{successMessage}</span>
             </div>
           )}
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold uppercase text-slate-400 mb-1.5">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
+                <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="user@example.com"
+                  placeholder="name@company.com"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-all"
                   required
-                  className="w-full bg-slate-950/70 border border-slate-800 rounded-lg pl-9 pr-3 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold uppercase text-slate-400 mb-1.5">
                 Password
               </label>
               <div className="relative">
-                <Lock className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
+                <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-all"
                   required
-                  className="w-full bg-slate-950/70 border border-slate-800 rounded-lg pl-9 pr-3 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
                 />
               </div>
             </div>
@@ -188,49 +201,50 @@ export default function LoginPage() {
             {mode === 'register' && (
               <>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
-                    Phone Number <span className="text-slate-500 font-normal">(Optional)</span>
+                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1.5">
+                    Phone Number <span className="text-slate-600 font-normal">(Optional)</span>
                   </label>
                   <div className="relative">
-                    <Phone className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
+                    <Phone className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                     <input
                       type="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="+234 801 234 5678"
-                      className="w-full bg-slate-950/70 border border-slate-800 rounded-lg pl-9 pr-3 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1.5">
                     Account Type
                   </label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
                       onClick={() => setRole('USER')}
-                      className={`p-2.5 text-xs font-medium rounded-lg border flex items-center justify-center gap-2 transition-all ${
+                      className={`p-2.5 rounded-xl border text-left text-xs transition-all ${
                         role === 'USER'
-                          ? 'border-emerald-500/80 bg-emerald-500/10 text-emerald-400'
-                          : 'border-slate-800 bg-slate-950/40 text-slate-400 hover:text-slate-200'
+                          ? 'border-indigo-500 bg-indigo-500/10 text-white'
+                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200'
                       }`}
                     >
-                      <UserCheck className="w-4 h-4" />
-                      Individual
+                      <div className="font-bold">Individual User</div>
+                      <div className="text-[10px] text-slate-500 mt-0.5">Personal settlement</div>
                     </button>
+
                     <button
                       type="button"
                       onClick={() => setRole('MERCHANT')}
-                      className={`p-2.5 text-xs font-medium rounded-lg border flex items-center justify-center gap-2 transition-all ${
+                      className={`p-2.5 rounded-xl border text-left text-xs transition-all ${
                         role === 'MERCHANT'
-                          ? 'border-emerald-500/80 bg-emerald-500/10 text-emerald-400'
-                          : 'border-slate-800 bg-slate-950/40 text-slate-400 hover:text-slate-200'
+                          ? 'border-indigo-500 bg-indigo-500/10 text-white'
+                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200'
                       }`}
                     >
-                      <ShieldCheck className="w-4 h-4" />
-                      Merchant
+                      <div className="font-bold">Merchant</div>
+                      <div className="text-[10px] text-slate-500 mt-0.5">Commercial API rails</div>
                     </button>
                   </div>
                 </div>
@@ -240,12 +254,12 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800/50 text-white rounded-lg font-semibold text-sm transition-all duration-200 shadow-lg shadow-emerald-950/40 flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed mt-2"
+              className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
             >
               {submitting ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>{mode === 'login' ? 'Signing In...' : 'Registering...'}</span>
+                  <span>Processing...</span>
                 </>
               ) : (
                 <span>{mode === 'login' ? 'Sign In to Account' : 'Complete Registration'}</span>
@@ -283,5 +297,19 @@ export default function LoginPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center">
+          <Loader2 className="w-6 h-6 animate-spin text-emerald-400" />
+        </div>
+      }
+    >
+      <LoginContent />
+    </Suspense>
   );
 }
