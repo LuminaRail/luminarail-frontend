@@ -1,13 +1,28 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Quote, Order, Payment } from '@/types/orders';
 import { QuotesService } from '@/services/quotes';
 import { OrdersService } from '@/services/orders';
 import { PaymentsService } from '@/services/payments';
 import { useStellarWallet } from '@/hooks/useStellarWallet';
 import { useAuth } from '@/context/AuthContext';
-import { X, ShieldCheck, ArrowRight, Loader2, Wallet, AlertCircle, CheckCircle2, Clock, RefreshCw } from 'lucide-react';
+import {
+  X,
+  ShieldCheck,
+  ArrowRight,
+  Loader2,
+  Wallet,
+  AlertCircle,
+  CheckCircle2,
+  Clock,
+  RefreshCw,
+  Lock,
+  LogIn,
+  UserPlus,
+} from 'lucide-react';
 
 async function validateStellarAddress(address: string): Promise<boolean> {
   if (!address || typeof address !== 'string') return false;
@@ -33,7 +48,8 @@ interface CreateOrderModalProps {
 }
 
 export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: CreateOrderModalProps) {
-  const { token } = useAuth();
+  const router = useRouter();
+  const { token, isAuthenticated } = useAuth();
   const { publicKey: connectedWalletAddress, connect: connectWallet } = useStellarWallet();
 
   const [quote, setQuote] = useState<Quote | null>(null);
@@ -146,9 +162,21 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
 
   if (!isOpen) return null;
 
+  const handleSaveWalletAddress = () => {
+    if (typeof window !== 'undefined' && walletAddress.trim()) {
+      localStorage.setItem('luminarail_wallet_address', walletAddress.trim());
+    }
+  };
+
   const handleCreateOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!quote || !token) return;
+    if (!quote) return;
+
+    if (!token || !isAuthenticated) {
+      handleSaveWalletAddress();
+      router.push(`/auth/login?redirect=${encodeURIComponent(`/orders?quoteId=${quote.id}`)}`);
+      return;
+    }
 
     if (isExpired) {
       setError('Quote has expired. Please refresh to lock in current rate.');
@@ -382,44 +410,76 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
                 </p>
               </div>
 
-              {/* Submit Button */}
-              <div className="pt-2">
-                {isExpired ? (
-                  <button
-                    type="button"
-                    onClick={handleRefreshQuote}
-                    disabled={refreshingQuote}
-                    className="w-full py-3 px-4 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white font-semibold text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    {refreshingQuote ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Refreshing Quote Rate...</span>
-                      </>
-                    ) : (
-                      <>
-                        <RefreshCw className="w-4 h-4" />
-                        <span>Quote Expired — Refresh Quote Rate</span>
-                      </>
-                    )}
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    disabled={submitting || refreshingQuote}
-                    className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    {submitting ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Creating Settlement Order...</span>
-                      </>
-                    ) : (
-                      <span>Create Settlement Order & Proceed to Deposit</span>
-                    )}
-                  </button>
-                )}
-              </div>
+              {/* Action Buttons: Unauthenticated vs Authenticated */}
+              {!isAuthenticated || !token ? (
+                <div className="pt-2 space-y-3">
+                  <div className="p-3 rounded-xl bg-indigo-950/40 border border-indigo-800/60 text-indigo-300 text-xs flex items-center gap-3">
+                    <Lock className="w-5 h-5 text-indigo-400 shrink-0" />
+                    <div>
+                      <p className="font-semibold text-slate-200">Account required to complete order</p>
+                      <p className="mt-0.5 text-slate-400">Sign in or create an account to finalize settlement & proceed to deposit.</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <Link
+                      href={`/auth/login?redirect=${encodeURIComponent(`/orders?quoteId=${quote.id}`)}`}
+                      onClick={handleSaveWalletAddress}
+                      className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-lg transition-all text-center flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <LogIn className="w-4 h-4" />
+                      <span>Sign In to Finish Order</span>
+                    </Link>
+
+                    <Link
+                      href={`/auth/login?mode=register&redirect=${encodeURIComponent(`/orders?quoteId=${quote.id}`)}`}
+                      onClick={handleSaveWalletAddress}
+                      className="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 font-semibold text-xs rounded-xl shadow-lg transition-all text-center flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <UserPlus className="w-4 h-4 text-emerald-400" />
+                      <span>Create Account</span>
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <div className="pt-2">
+                  {isExpired ? (
+                    <button
+                      type="button"
+                      onClick={handleRefreshQuote}
+                      disabled={refreshingQuote}
+                      className="w-full py-3 px-4 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white font-semibold text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      {refreshingQuote ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Refreshing Quote Rate...</span>
+                        </>
+                      ) : (
+                        <>
+                          <RefreshCw className="w-4 h-4" />
+                          <span>Quote Expired — Refresh Quote Rate</span>
+                        </>
+                      )}
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      disabled={submitting || refreshingQuote}
+                      className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      {submitting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Creating Settlement Order...</span>
+                        </>
+                      ) : (
+                        <span>Create Settlement Order & Proceed to Deposit</span>
+                      )}
+                    </button>
+                  )}
+                </div>
+              )}
 
             </form>
           ) : null}
