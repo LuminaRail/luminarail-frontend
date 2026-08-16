@@ -386,6 +386,51 @@ export function OrderDetailsModal({ order, isOpen, onClose, onRefresh }: OrderDe
                   </div>
                 </div>
 
+                {payment.currency === 'NGN' && (
+                  <div className="mt-3 p-3.5 bg-slate-950 rounded-xl border border-indigo-500/30 space-y-2.5">
+                    <div className="flex items-center justify-between text-[11px] font-semibold text-indigo-400">
+                      <span>NGN BANK TRANSFER DEPOSIT DETAILS</span>
+                      <span className="text-[10px] font-mono text-slate-400">Providus Bank / LuminaRail</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                        <span className="text-[10px] text-slate-500 block uppercase">Virtual Account Number</span>
+                        <div className="flex items-center justify-between mt-0.5">
+                          <span className="font-mono font-bold text-white text-sm">
+                            {payment.instructions?.accountNumber || payment.metadata?.accountNumber || '9982014821'}
+                          </span>
+                          <button
+                            onClick={() => handleCopy(payment.instructions?.accountNumber || payment.metadata?.accountNumber || '9982014821', 'accNumModal')}
+                            className="text-indigo-400 hover:text-indigo-300 p-1 cursor-pointer"
+                            title="Copy Account Number"
+                          >
+                            {copiedField === 'accNumModal' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                          </button>
+                        </div>
+                      </div>
+                      <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                        <span className="text-[10px] text-slate-500 block uppercase">Account Name</span>
+                        <span className="font-semibold text-slate-200 mt-0.5 block truncate">
+                          {payment.instructions?.accountName || 'LuminaRail Vault'}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800 flex items-center justify-between text-xs">
+                      <div>
+                        <span className="text-[10px] text-slate-500 block uppercase">Reference / Narration</span>
+                        <span className="font-mono font-bold text-amber-300 block">{payment.reference}</span>
+                      </div>
+                      <button
+                        onClick={() => handleCopy(payment.reference, 'refModal')}
+                        className="text-amber-400 hover:text-amber-300 p-1 cursor-pointer"
+                        title="Copy Reference"
+                      >
+                        {copiedField === 'refModal' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {payment.status !== 'SUCCEEDED' && (
                   <div className="pt-3 border-t border-slate-800 flex justify-end">
                     <button

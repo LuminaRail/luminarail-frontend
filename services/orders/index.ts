@@ -23,9 +23,13 @@ export class OrdersService {
 
   public static async createOrder(
     payload: CreateOrderInput,
-    token?: string
+    token?: string,
+    idempotencyKey?: string
   ): Promise<ApiResponse<Order>> {
-    return ApiClient.post<Order, CreateOrderInput>('/orders', payload, token);
+    const headers = idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : undefined;
+    return headers
+      ? ApiClient.post<Order, CreateOrderInput>('/orders', payload, token, headers)
+      : ApiClient.post<Order, CreateOrderInput>('/orders', payload, token);
   }
 
   public static async updateOrderWallet(

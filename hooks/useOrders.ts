@@ -11,6 +11,8 @@ export interface OrderStats {
   processingCount: number;
   completedCount: number;
   failedCount: number;
+  completedVolumeNgn: number;
+  completedVolumeUsdc: number;
 }
 
 export function useOrders() {
@@ -135,7 +137,10 @@ export function useOrders() {
     [token, limit, fetchOrders]
   );
 
-  // Stats computation derived from backend Order statuses
+  const completedOrders = orders.filter(
+    (o) => o.status === 'SETTLEMENT_COMPLETED' || o.status === 'COMPLETED'
+  );
+
   const stats: OrderStats = {
     totalOrders: total || orders.length,
     pendingCount: orders.filter(
@@ -144,12 +149,12 @@ export function useOrders() {
     processingCount: orders.filter(
       (o) => o.status === 'PAYMENT_CONFIRMED' || o.status === 'SETTLEMENT_PENDING'
     ).length,
-    completedCount: orders.filter(
-      (o) => o.status === 'SETTLEMENT_COMPLETED' || o.status === 'COMPLETED'
-    ).length,
+    completedCount: completedOrders.length,
     failedCount: orders.filter(
       (o) => o.status === 'FAILED' || o.status === 'CANCELLED' || o.status === 'REFUNDED'
     ).length,
+    completedVolumeNgn: completedOrders.reduce((sum, o) => sum + Number(o.sourceAmount || 0), 0),
+    completedVolumeUsdc: completedOrders.reduce((sum, o) => sum + Number(o.destinationAmount || 0), 0),
   };
 
   return {

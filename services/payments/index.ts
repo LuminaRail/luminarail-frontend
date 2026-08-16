@@ -5,9 +5,13 @@ import { ApiResponse } from '@/types/api';
 export class PaymentsService {
   public static async createPayment(
     payload: CreatePaymentInput,
-    token?: string
+    token?: string,
+    idempotencyKey?: string
   ): Promise<ApiResponse<Payment>> {
-    return ApiClient.post<Payment, CreatePaymentInput>('/payments', payload, token);
+    const headers = idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : undefined;
+    return headers
+      ? ApiClient.post<Payment, CreatePaymentInput>('/payments', payload, token, headers)
+      : ApiClient.post<Payment, CreatePaymentInput>('/payments', payload, token);
   }
 
   public static async getPayment(

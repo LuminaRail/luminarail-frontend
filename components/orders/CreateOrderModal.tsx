@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { StrKey } from '@stellar/stellar-sdk';
-import { Quote, Order } from '@/types/orders';
+import { Quote, Order, Payment } from '@/types/orders';
 import { QuotesService } from '@/services/quotes';
 import { OrdersService } from '@/services/orders';
 import { PaymentsService } from '@/services/payments';
@@ -14,7 +14,7 @@ interface CreateOrderModalProps {
   quoteId: string | null;
   isOpen: boolean;
   onClose: () => void;
-  onOrderCreated: (order: Order) => void;
+  onOrderCreated: (order: Order, payment?: Payment) => void;
 }
 
 export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: CreateOrderModalProps) {
@@ -83,14 +83,16 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
     setError(null);
 
     try {
-      // Step 1: Create Order with verified Stellar destination address
+      // Step 1: Create Order with verified Stellar destination address & Idempotency Key
+      const orderIdempotencyKey = `order-onramp-${quote.id}-${Date.now()}`;
       const orderRes = await OrdersService.createOrder(
         {
           quoteId: quote.id,
           type: orderType,
           walletAddress: trimmedAddress,
         },
-        token
+        token,
+        orderIdempotencyKey
       );
 
       if (!orderRes.success || !orderRes.data) {
@@ -99,20 +101,27 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
 
       const createdOrder = orderRes.data;
 
-      // Step 2: Automatically initiate payment
+      // Step 2: Automatically initiate Paystack NGN payment rail
+      let createdPayment: Payment | undefined;
+      const pmtIdempotencyKey = `paystack-onramp-${createdOrder.id}-${Date.now()}`;
       try {
-        await PaymentsService.createPayment(
+        const pmtRes = await PaymentsService.createPayment(
           {
             orderId: createdOrder.id,
             currency: quote.sourceCurrency,
+            provider: 'PAYSTACK',
           },
-          token
+          token,
+          pmtIdempotencyKey
         );
+        if (pmtRes.success && pmtRes.data) {
+          createdPayment = pmtRes.data;
+        }
       } catch (pmtErr) {
-        console.warn('Auto payment initiation warning:', pmtErr);
+        console.warn('Auto Paystack payment initiation warning:', pmtErr);
       }
 
-      onOrderCreated(createdOrder);
+      onOrderCreated(createdOrder, createdPayment);
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error creating order.');

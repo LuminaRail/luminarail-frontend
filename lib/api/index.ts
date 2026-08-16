@@ -3,9 +3,10 @@ import { ApiResponse } from '@/types/api';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
 
 export class ApiClient {
-  private static getHeaders(authToken?: string): HeadersInit {
+  private static getHeaders(authToken?: string, customHeaders?: Record<string, string>): HeadersInit {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
+      ...(customHeaders || {}),
     };
     if (authToken) {
       headers['Authorization'] = `Bearer ${authToken}`;
@@ -61,11 +62,11 @@ export class ApiClient {
     };
   }
 
-  public static async get<T>(endpoint: string, token?: string): Promise<ApiResponse<T>> {
+  public static async get<T>(endpoint: string, token?: string, customHeaders?: Record<string, string>): Promise<ApiResponse<T>> {
     try {
       const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'GET',
-        headers: this.getHeaders(token),
+        headers: this.getHeaders(token, customHeaders),
       });
       return await this.processResponse<T>(res);
     } catch (error) {
@@ -77,11 +78,11 @@ export class ApiClient {
     }
   }
 
-  public static async post<T, B = unknown>(endpoint: string, body: B, token?: string): Promise<ApiResponse<T>> {
+  public static async post<T, B = unknown>(endpoint: string, body: B, token?: string, customHeaders?: Record<string, string>): Promise<ApiResponse<T>> {
     try {
       const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
-        headers: this.getHeaders(token),
+        headers: this.getHeaders(token, customHeaders),
         body: JSON.stringify(body),
       });
       return await this.processResponse<T>(res);
@@ -94,11 +95,11 @@ export class ApiClient {
     }
   }
 
-  public static async patch<T, B = unknown>(endpoint: string, body: B, token?: string): Promise<ApiResponse<T>> {
+  public static async patch<T, B = unknown>(endpoint: string, body: B, token?: string, customHeaders?: Record<string, string>): Promise<ApiResponse<T>> {
     try {
       const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'PATCH',
-        headers: this.getHeaders(token),
+        headers: this.getHeaders(token, customHeaders),
         body: JSON.stringify(body),
       });
       return await this.processResponse<T>(res);
