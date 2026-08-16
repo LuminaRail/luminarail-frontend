@@ -6,13 +6,17 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { WalletConnectButton } from '../wallet/WalletConnectButton';
 import { ThemeToggle } from '../theme/ThemeToggle';
+import { useTheme } from '../theme/ThemeProvider';
 import { useAuth } from '@/context/AuthContext';
 import { Menu, X, ArrowUpRight, LogOut, User } from 'lucide-react';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
+  const { theme } = useTheme();
   const pathname = usePathname();
+
+  const logoSrc = theme === 'light' ? '/brand/luminarail-icon-light.svg' : '/brand/luminarail-icon-dark.svg';
 
   const navLinks = [
     { href: '/#product', label: 'Product' },
@@ -41,7 +45,7 @@ export function Header() {
         <div className="flex items-center gap-3 shrink-0">
           <Link href="/" className="flex items-center gap-2.5 group">
             <Image
-              src="/brand/luminarail-icon-dark.svg"
+              src={logoSrc}
               alt="LuminaRail Logo"
               width={28}
               height={28}

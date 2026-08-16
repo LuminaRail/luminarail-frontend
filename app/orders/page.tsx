@@ -184,7 +184,7 @@ function OrdersContent() {
   });
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col overflow-x-hidden">
+    <div className="relative min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex flex-col overflow-x-hidden transition-colors duration-200">
       {/* Background Grid Scan animation */}
       <GridScan scanColor="#15e113" opacity={0.85} gridScale={45} scanSpeed={1.0} scanHeight={160} />
 
@@ -198,12 +198,12 @@ function OrdersContent() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">Settlement Orders</h1>
-              <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/60">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Settlement Orders</h1>
+              <span className="text-xs font-mono uppercase tracking-widest text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/60">
                 Stellar & Soroban
               </span>
             </div>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
               Track local fiat payment and on-chain settlement order state transitions in real time.
             </p>
           </div>
@@ -212,7 +212,7 @@ function OrdersContent() {
             <button
               onClick={() => fetchOrders(offset, limit)}
               disabled={loading}
-              className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-all cursor-pointer"
+              className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-slate-700 transition-all cursor-pointer shadow-xs"
               title="Refresh Orders"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -220,7 +220,7 @@ function OrdersContent() {
 
             <Link
               href="/quotes"
-              className="py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-lg shadow-emerald-950/50 transition-all flex items-center gap-2 cursor-pointer"
+              className="py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-lg shadow-emerald-950/20 transition-all flex items-center gap-2 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Get New Quote</span>
@@ -230,12 +230,12 @@ function OrdersContent() {
 
         {/* Unauthenticated View */}
         {!authLoading && !isAuthenticated ? (
-          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-12 text-center max-w-lg mx-auto shadow-2xl my-12">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-4">
+          <div className="bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-12 text-center max-w-lg mx-auto shadow-2xl my-12 backdrop-blur-md">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto mb-4">
               <Lock className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-bold text-slate-100">Sign in required</h2>
-            <p className="text-xs text-slate-400 mt-2 mb-6">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Sign in required</h2>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 mb-6">
               Please sign in or register to view and manage your LuminaRail settlement orders.
             </p>
             <Link
@@ -251,7 +251,7 @@ function OrdersContent() {
             <OrderSummaryCards stats={stats} />
 
             {/* Filter & Search Bar */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 mb-6 shadow-xl backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-6 shadow-xl backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-4">
               
               {/* Status Tabs */}
               <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
@@ -262,7 +262,7 @@ function OrdersContent() {
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
                       statusFilter === st
                         ? 'bg-emerald-600 text-white shadow-md'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60'
                     }`}
                   >
                     {st}
@@ -272,13 +272,13 @@ function OrdersContent() {
 
               {/* Search Bar */}
               <div className="relative w-full md:w-64">
-                <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-500" />
+                <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400 dark:text-slate-500" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by ID or asset..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
+                  className="w-full bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
                 />
               </div>
 
@@ -286,30 +286,30 @@ function OrdersContent() {
 
             {/* Main Orders Table / Cards View */}
             {loading && orders.length === 0 ? (
-              <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-3">
-                <RefreshCw className="w-8 h-8 text-emerald-400 animate-spin" />
-                <p className="text-sm font-semibold text-slate-300">Loading your orders...</p>
+              <div className="bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-3">
+                <RefreshCw className="w-8 h-8 text-emerald-600 dark:text-emerald-400 animate-spin" />
+                <p className="text-sm font-semibold text-slate-800 dark:text-slate-300">Loading your orders...</p>
                 <p className="text-xs text-slate-500">Fetching live settlement lifecycle states from backend.</p>
               </div>
             ) : error && orders.length === 0 ? (
-              <div className="bg-slate-900/60 border border-rose-900/50 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-3">
-                <AlertCircle className="w-8 h-8 text-rose-400" />
-                <p className="text-sm font-semibold text-rose-300">We couldn't load your orders</p>
-                <p className="text-xs text-slate-400 max-w-md">{error}</p>
+              <div className="bg-white/60 dark:bg-slate-900/60 border border-rose-200 dark:border-rose-900/50 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-3">
+                <AlertCircle className="w-8 h-8 text-rose-500 dark:text-rose-400" />
+                <p className="text-sm font-semibold text-rose-700 dark:text-rose-300">We couldn't load your orders</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 max-w-md">{error}</p>
                 <button
                   onClick={() => fetchOrders(offset, limit)}
-                  className="mt-2 py-2 px-4 bg-rose-600/80 hover:bg-rose-600 text-white rounded-lg font-medium text-xs transition-all cursor-pointer"
+                  className="mt-2 py-2 px-4 bg-rose-600 hover:bg-rose-500 text-white rounded-lg font-medium text-xs transition-all cursor-pointer shadow"
                 >
                   Try Again
                 </button>
               </div>
             ) : filteredOrders.length === 0 ? (
-              <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-slate-800/60 border border-slate-700 flex items-center justify-center text-slate-500 mb-1">
+              <div className="bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 mb-1">
                   <Layers className="w-6 h-6" />
                 </div>
-                <p className="text-sm font-bold text-slate-200">No settlement orders found</p>
-                <p className="text-xs text-slate-400 max-w-sm">
+                <p className="text-sm font-bold text-slate-800 dark:text-slate-200">No settlement orders found</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 max-w-sm">
                   {searchQuery || statusFilter !== 'ALL'
                     ? 'No orders match your selected search query or status filter.'
                     : 'You haven’t created any LuminaRail settlement orders yet.'}
@@ -322,13 +322,13 @@ function OrdersContent() {
                 </Link>
               </div>
             ) : (
-              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl shadow-xl overflow-hidden backdrop-blur-md">
+              <div className="bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden backdrop-blur-md">
                 
                 {/* Desktop Table View */}
                 <div className="hidden md:block overflow-x-auto">
-                  <table className="w-full text-left text-xs text-slate-300 border-collapse">
+                  <table className="w-full text-left text-xs text-slate-700 dark:text-slate-300 border-collapse">
                     <thead>
-                      <tr className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase font-mono tracking-wider">
+                      <tr className="bg-slate-100/80 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 uppercase font-mono tracking-wider">
                         <th className="py-3.5 px-4 font-semibold">Order ID</th>
                         <th className="py-3.5 px-4 font-semibold">Type</th>
                         <th className="py-3.5 px-4 font-semibold">Source</th>
@@ -338,29 +338,29 @@ function OrdersContent() {
                         <th className="py-3.5 px-4 font-semibold text-right">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800/60">
+                    <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
                       {filteredOrders.map((ord) => (
                         <tr
                           key={ord.id}
-                          className="hover:bg-slate-800/40 transition-colors group cursor-pointer"
+                          className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group cursor-pointer"
                           onClick={() => handleOpenDetails(ord.id)}
                         >
-                          <td className="py-4 px-4 font-mono font-medium text-slate-200">
+                          <td className="py-4 px-4 font-mono font-medium text-slate-900 dark:text-slate-200">
                             #{ord.id.slice(0, 8)}...
                           </td>
                           <td className="py-4 px-4">
-                            <span className="font-semibold text-slate-300">{ord.type}</span>
+                            <span className="font-semibold text-slate-700 dark:text-slate-300">{ord.type}</span>
                           </td>
-                          <td className="py-4 px-4 font-semibold text-slate-100">
+                          <td className="py-4 px-4 font-semibold text-slate-900 dark:text-slate-100">
                             {Number(ord.sourceAmount).toLocaleString()}{' '}
-                            <span className="text-slate-400 font-normal">{ord.sourceCurrency}</span>
+                            <span className="text-slate-500 dark:text-slate-400 font-normal">{ord.sourceCurrency}</span>
                           </td>
-                          <td className="py-4 px-4 font-semibold text-emerald-400">
+                          <td className="py-4 px-4 font-semibold text-emerald-600 dark:text-emerald-400">
                             {Number(ord.destinationAmount).toLocaleString()}{' '}
-                            <span className="text-emerald-300 font-normal">{ord.destinationAsset}</span>
+                            <span className="text-emerald-700 dark:text-emerald-300 font-normal">{ord.destinationAsset}</span>
                           </td>
                           <td className="py-4 px-4">{getStatusBadge(ord.status, ord.walletAddress)}</td>
-                          <td className="py-4 px-4 text-slate-400">
+                          <td className="py-4 px-4 text-slate-500 dark:text-slate-400">
                             {new Date(ord.createdAt).toLocaleDateString(undefined, {
                               month: 'short',
                               day: 'numeric',
@@ -379,7 +379,7 @@ function OrdersContent() {
                               )}
                               <button
                                 onClick={() => handleOpenDetails(ord.id)}
-                                className="py-1.5 px-3 bg-slate-800 hover:bg-emerald-600/20 hover:text-emerald-400 text-slate-300 rounded-lg text-xs font-semibold transition-all border border-slate-700 hover:border-emerald-500/40 cursor-pointer"
+                                className="py-1.5 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-600/20 text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 rounded-lg text-xs font-semibold transition-all border border-slate-200 dark:border-slate-700 hover:border-emerald-500/40 cursor-pointer"
                               >
                                 View Details
                               </button>
@@ -392,15 +392,15 @@ function OrdersContent() {
                 </div>
 
                 {/* Mobile Cards View */}
-                <div className="md:hidden divide-y divide-slate-800/80">
+                <div className="md:hidden divide-y divide-slate-200 dark:divide-slate-800/80">
                   {filteredOrders.map((ord) => (
                     <div
                       key={ord.id}
                       onClick={() => handleOpenDetails(ord.id)}
-                      className="p-4 hover:bg-slate-800/40 transition-colors space-y-3 cursor-pointer"
+                      className="p-4 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors space-y-3 cursor-pointer"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-mono font-bold text-slate-200 text-xs">
+                        <span className="font-mono font-bold text-slate-900 dark:text-slate-200 text-xs">
                           #{ord.id.slice(0, 8)}...
                         </span>
                         {getStatusBadge(ord.status, ord.walletAddress)}
@@ -409,22 +409,22 @@ function OrdersContent() {
                       <div className="flex items-center justify-between text-xs pt-1">
                         <div>
                           <span className="text-[10px] text-slate-500 uppercase block">Source</span>
-                          <span className="font-bold text-slate-100">
+                          <span className="font-bold text-slate-900 dark:text-slate-100">
                             {Number(ord.sourceAmount).toLocaleString()} {ord.sourceCurrency}
                           </span>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-slate-600" />
+                        <ArrowRight className="w-4 h-4 text-slate-400 dark:text-slate-600" />
                         <div className="text-right">
                           <span className="text-[10px] text-slate-500 uppercase block">Destination</span>
-                          <span className="font-bold text-emerald-400">
+                          <span className="font-bold text-emerald-600 dark:text-emerald-400">
                             {Number(ord.destinationAmount).toLocaleString()} {ord.destinationAsset}
                           </span>
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                      <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-200 dark:border-slate-800/60">
                         <span>{new Date(ord.createdAt).toLocaleDateString()}</span>
-                        <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                        <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                           View details →
                         </span>
                       </div>
@@ -434,26 +434,26 @@ function OrdersContent() {
 
                 {/* Pagination Controls */}
                 {total > limit && (
-                  <div className="bg-slate-950/80 px-4 py-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                  <div className="bg-slate-100/80 dark:bg-slate-950/80 px-4 py-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
                     <div>
-                      Showing <span className="font-semibold text-slate-200">{offset + 1}</span> to{' '}
-                      <span className="font-semibold text-slate-200">
+                      Showing <span className="font-semibold text-slate-900 dark:text-slate-200">{offset + 1}</span> to{' '}
+                      <span className="font-semibold text-slate-900 dark:text-slate-200">
                         {Math.min(offset + limit, total)}
                       </span>{' '}
-                      of <span className="font-semibold text-slate-200">{total}</span> orders
+                      of <span className="font-semibold text-slate-900 dark:text-slate-200">{total}</span> orders
                     </div>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => fetchOrders(Math.max(0, offset - limit), limit)}
                         disabled={offset === 0 || loading}
-                        className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-40 text-slate-300"
+                        className="p-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40 text-slate-700 dark:text-slate-300"
                       >
                         <ChevronLeft className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => fetchOrders(offset + limit, limit)}
                         disabled={offset + limit >= total || loading}
-                        className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-40 text-slate-300"
+                        className="p-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40 text-slate-700 dark:text-slate-300"
                       >
                         <ChevronRight className="w-4 h-4" />
                       </button>
@@ -505,8 +505,8 @@ export default function OrdersPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center">
-          <RefreshCw className="w-6 h-6 animate-spin text-emerald-400" />
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex items-center justify-center">
+          <RefreshCw className="w-6 h-6 animate-spin text-emerald-600 dark:text-emerald-400" />
         </div>
       }
     >
