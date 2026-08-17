@@ -9,6 +9,8 @@ import { OrdersService } from '@/services/orders';
 import { PaymentsService } from '@/services/payments';
 import { useStellarWallet } from '@/hooks/useStellarWallet';
 import { useAuth } from '@/context/AuthContext';
+import { WalletSelectModal } from '@/components/wallet/WalletSelectModal';
+import { StellarWalletType } from '@/types/wallets';
 import {
   X,
   ShieldCheck,
@@ -50,12 +52,22 @@ interface CreateOrderModalProps {
 export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: CreateOrderModalProps) {
   const router = useRouter();
   const { token, isAuthenticated } = useAuth();
-  const { publicKey: connectedWalletAddress, connect: connectWallet } = useStellarWallet();
+  const {
+    publicKey: connectedWalletAddress,
+    isFreighterAvailable,
+    isLobstrAvailable,
+    isWalletConnectAvailable,
+    loading: walletLoading,
+    error: walletError,
+    connect: connectWallet,
+    clearError: clearWalletError,
+  } = useStellarWallet();
 
   const [quote, setQuote] = useState<Quote | null>(null);
   const [walletAddress, setWalletAddress] = useState<string>('');
   const [orderType, setOrderType] = useState<'ON_RAMP' | 'OFF_RAMP'>('ON_RAMP');
 
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState<boolean>(false);
   const [loadingQuote, setLoadingQuote] = useState<boolean>(false);
   const [refreshingQuote, setRefreshingQuote] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -157,6 +169,19 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
       setError('Failed to refresh quote metrics.');
     } finally {
       setRefreshingQuote(false);
+    }
+  };
+
+  const handleOpenWalletModal = () => {
+    clearWalletError();
+    setIsWalletModalOpen(true);
+  };
+
+  const handleSelectWallet = async (type: StellarWalletType) => {
+    const addr = await connectWallet(type);
+    if (addr) {
+      setWalletAddress(addr);
+      setIsWalletModalOpen(false);
     }
   };
 
@@ -381,22 +406,20 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
                   <label className="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-400 tracking-wider">
                     Destination Stellar Wallet Address
                   </label>
-                  {connectedWalletAddress ? (
-                    <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" /> Connected
-                    </span>
-                  ) : (
+                  <div className="flex items-center gap-2">
+                    {connectedWalletAddress && (
+                      <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" /> Connected
+                      </span>
+                    )}
                     <button
                       type="button"
-                      onClick={async () => {
-                        const addr = await connectWallet('freighter');
-                        if (addr) setWalletAddress(addr);
-                      }}
-                      className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer"
+                      onClick={handleOpenWalletModal}
+                      className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
                     >
-                      <Wallet className="w-3 h-3" /> Connect Wallet
+                      <Wallet className="w-3 h-3" /> {connectedWalletAddress ? 'Switch Wallet' : 'Connect Wallet'}
                     </button>
-                  )}
+                  </div>
                 </div>
                 <input
                   type="text"
@@ -486,6 +509,21 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
         </div>
 
       </div>
+
+      {/* Stellar Wallet Selection Modal */}
+      <WalletSelectModal
+        isOpen={isWalletModalOpen}
+        onClose={() => {
+          clearWalletError();
+          setIsWalletModalOpen(false);
+        }}
+        onSelectWallet={handleSelectWallet}
+        isFreighterAvailable={isFreighterAvailable}
+        isLobstrAvailable={isLobstrAvailable}
+        isWalletConnectAvailable={isWalletConnectAvailable}
+        loading={walletLoading}
+        error={walletError}
+      />
     </div>
   );
 }
