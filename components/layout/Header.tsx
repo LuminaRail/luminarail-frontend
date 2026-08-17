@@ -41,7 +41,7 @@ export function Header() {
     <header className="sticky top-0 z-50 bg-white/80 dark:bg-[#090d16]/80 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         
-        {/* Left: Brand Logo & Network Status Badge */}
+        {/* Left: Brand Logo */}
         <div className="flex items-center gap-3 shrink-0">
           <Link href="/" className="flex items-center gap-2.5 group">
             <Image
@@ -56,11 +56,6 @@ export function Header() {
               Lumina<span className="text-[#15E113] font-semibold">Rail</span>
             </span>
           </Link>
-
-          <div className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-medium tracking-wide uppercase whitespace-nowrap bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 shrink-0">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-            <span>Stellar Testnet • Paystack Test Mode</span>
-          </div>
         </div>
 
         {/* Center: Desktop Navigation Bar */}
