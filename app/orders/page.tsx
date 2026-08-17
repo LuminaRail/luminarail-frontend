@@ -492,7 +492,7 @@ function OrdersContent() {
         order={selectedNgnOrder}
         payment={selectedNgnPayment}
         onPaymentUpdated={(updatedPayment) => {
-          setSelectedNgnPayment(updatedPayment);
+          setSelectedNgnPayment((prev) => (prev ? { ...prev, ...updatedPayment } : updatedPayment));
           fetchOrders(offset, limit, true);
         }}
       />
