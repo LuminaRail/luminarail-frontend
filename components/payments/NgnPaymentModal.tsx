@@ -51,7 +51,7 @@ export function NgnPaymentModal({
         const res = await PaymentsService.verifyPayment(payment.id, {}, token);
         if (res.success && res.data) {
           if (res.data.status !== payment.status) {
-            onPaymentUpdated(res.data);
+            onPaymentUpdated({ ...payment, ...res.data });
             if (res.data.status === 'SUCCEEDED') {
               setSuccessMsg('Payment verified & confirmed! USDC settlement triggered.');
             }
@@ -63,12 +63,12 @@ export function NgnPaymentModal({
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isOpen, payment?.id, payment?.status, token, onPaymentUpdated]);
+  }, [isOpen, payment, token, onPaymentUpdated]);
 
   if (!isOpen || !order || !payment) return null;
 
   const isPaystackMode =
-    payment.provider.includes('PAYSTACK') ||
+    (payment.provider && payment.provider.includes('PAYSTACK')) ||
     !!payment.instructions?.paymentUrl ||
     payment.metadata?.railType === 'PAYSTACK_TEST_CHECKOUT';
 
@@ -78,8 +78,8 @@ export function NgnPaymentModal({
     bankName: isPaystackMode ? 'Paystack Test Mode Checkout' : 'Providus Bank / LuminaRail Rail',
     accountNumber: payment.metadata?.accountNumber || (isPaystackMode ? undefined : '9982014821'),
     accountName: isPaystackMode ? 'Paystack Test Merchant' : 'LuminaRail On-Ramp Vault',
-    reference: payment.reference,
-    amount: payment.amount.toString(),
+    reference: payment.reference || order.id,
+    amount: payment.amount ? payment.amount.toString() : order.sourceAmount ? order.sourceAmount.toString() : '0',
     paymentUrl,
     instructions: isPaystackMode
       ? 'Complete Paystack TEST MODE payment via dynamic test bank transfer or test card.'
@@ -110,7 +110,7 @@ export function NgnPaymentModal({
       );
 
       if (res.success && res.data) {
-        onPaymentUpdated(res.data);
+        onPaymentUpdated({ ...payment, ...res.data });
         if (res.data.status === 'SUCCEEDED') {
           setSuccessMsg('Payment verified & confirmed! USDC settlement triggered.');
         } else if (res.data.status === 'FAILED') {
