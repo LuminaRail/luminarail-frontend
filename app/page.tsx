@@ -38,12 +38,6 @@ export default function Home() {
                   <span>Stablecoin Settlement Infrastructure</span>
                 </div>
 
-                {/* Development/Testnet Notice */}
-                <div className="p-3.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-900 dark:text-amber-300 text-xs font-sans leading-relaxed">
-                  <span className="font-semibold block mb-0.5">Development/Testnet Notice:</span>
-                  LuminaRail currently uses Paystack Test Mode and Stellar Testnet/Soroban Testnet for development and demonstration. Production NGN deposits and production Stellar settlement require production provider credentials, compliance/KYB, and production network configuration.
-                </div>
-
                 {/* Main Headline */}
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] text-slate-900 dark:text-slate-100">
                   Move local money <br />
