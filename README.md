@@ -4,6 +4,26 @@ LuminaRail Frontend is the Next.js user interface for **LuminaRail**, an NGN →
 
 It connects end-users to the deployed LuminaRail backend API to request real-time foreign exchange quotes, initiate NGN deposits via Paystack hosted checkout, monitor payment confirmation, attach non-custodial Stellar wallets, and track automated Soroban USDC settlements to destination addresses on the Stellar network.
 
+> [!IMPORTANT]
+> **Development/Testnet Notice:**
+> LuminaRail currently uses Paystack Test Mode and Stellar Testnet/Soroban Testnet for development and demonstration. Production NGN deposits and production Stellar settlement require production provider credentials, compliance/KYB, and production network configuration.
+
+### Architecture & Settlement Data Flow
+
+```
+Frontend
+   ↓
+LuminaRail Backend
+   ↓
+Paystack
+   ↓
+Payment confirmation
+   ↓
+Stellar/Soroban settlement
+   ↓
+User Stellar wallet
+```
+
 ---
 
 ## Current Features
