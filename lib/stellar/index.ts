@@ -25,7 +25,7 @@ export class StellarWalletService {
   public static async isFreighterAvailable(): Promise<boolean> {
     if (typeof window === 'undefined') return false;
     try {
-      if ((window as any).freighter) return true;
+      if ((window as unknown as Record<string, unknown>).freighter) return true;
       const res = await checkFreighterConnected();
       return !!res?.isConnected;
     } catch (err) {
@@ -41,7 +41,7 @@ export class StellarWalletService {
     if (typeof window === 'undefined') return false;
     try {
       const isBrowser = typeof isLobstrBrowser === 'function'
-        ? (isLobstrBrowser as any)()
+        ? (isLobstrBrowser as () => boolean)()
         : (isLobstrBrowser ?? (typeof window !== 'undefined'));
 
       if (!isBrowser) return false;
@@ -102,12 +102,13 @@ export class StellarWalletService {
         }
 
         return { publicKey: addr, walletType: 'freighter' };
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('[Freighter] connection error:', err);
-        if (err?.message?.includes('User rejected') || err?.message?.includes('declined') || err?.message?.includes('Cancel')) {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        if (errMsg.includes('User rejected') || errMsg.includes('declined') || errMsg.includes('Cancel')) {
           throw new Error('Connection was rejected in your wallet.');
         }
-        throw new Error(err?.message || 'Freighter connection failed.');
+        throw new Error(errMsg || 'Freighter connection failed.');
       }
     }
 
@@ -118,7 +119,7 @@ export class StellarWalletService {
       console.log('[LOBSTR] connect clicked');
 
       const isBrowser = typeof isLobstrBrowser === 'function'
-        ? (isLobstrBrowser as any)()
+        ? (isLobstrBrowser as () => boolean)()
         : (isLobstrBrowser ?? (typeof window !== 'undefined'));
       console.log('[LOBSTR] isBrowser:', isBrowser);
 
@@ -156,15 +157,16 @@ export class StellarWalletService {
         }
 
         return { publicKey: trimmedKey, walletType: 'lobstr' };
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('[LOBSTR] connection error:', err);
+        const errMsg = err instanceof Error ? err.message : String(err);
         if (typeof err === 'string' && (err.includes('rejected') || err.includes('declined') || err.includes('Cancel'))) {
           throw new Error('Connection was rejected in your wallet.');
         }
-        if (err?.message?.includes('User rejected') || err?.message?.includes('declined') || err?.message?.includes('Cancel')) {
+        if (errMsg.includes('User rejected') || errMsg.includes('declined') || errMsg.includes('Cancel')) {
           throw new Error('Connection was rejected in your wallet.');
         }
-        throw new Error(typeof err === 'string' ? err : err?.message || 'LOBSTR connection failed.');
+        throw new Error(typeof err === 'string' ? err : errMsg || 'LOBSTR connection failed.');
       }
     }
 
@@ -207,21 +209,23 @@ export class StellarWalletService {
       try {
         const signResult = await freighterSignTransaction(xdr, {
           networkPassphrase: options?.networkPassphrase,
-        } as any);
+        });
 
+        const resObj = signResult as unknown as Record<string, string>;
         const signedXdr = typeof signResult === 'string'
           ? signResult
-          : (signResult as any)?.signedTxXdr || (signResult as any)?.signedXdr;
+          : (resObj?.signedTxXdr || resObj?.signedXdr);
 
         if (!signedXdr) {
           throw new Error('Transaction signing was rejected by user.');
         }
         return signedXdr;
-      } catch (err: any) {
-        if (err?.message?.includes('User rejected') || err?.message?.includes('declined') || err?.message?.includes('Cancel')) {
+      } catch (err: unknown) {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        if (errMsg.includes('User rejected') || errMsg.includes('declined') || errMsg.includes('Cancel')) {
           throw new Error('Transaction signing was rejected by user.');
         }
-        throw new Error(err?.message || 'Freighter transaction signing failed.');
+        throw new Error(errMsg || 'Freighter transaction signing failed.');
       }
     }
 
@@ -238,15 +242,16 @@ export class StellarWalletService {
           throw new Error('Transaction signing was rejected by user.');
         }
         return signedXdr;
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('[LOBSTR] transaction signing error:', err);
+        const errMsg = err instanceof Error ? err.message : String(err);
         if (typeof err === 'string' && (err.includes('rejected') || err.includes('declined') || err.includes('Cancel'))) {
           throw new Error('Transaction signing was rejected by user.');
         }
-        if (err?.message?.includes('User rejected') || err?.message?.includes('declined') || err?.message?.includes('Cancel')) {
+        if (errMsg.includes('User rejected') || errMsg.includes('declined') || errMsg.includes('Cancel')) {
           throw new Error('Transaction signing was rejected by user.');
         }
-        throw new Error(typeof err === 'string' ? err : err?.message || 'LOBSTR transaction signing failed.');
+        throw new Error(typeof err === 'string' ? err : errMsg || 'LOBSTR transaction signing failed.');
       }
     }
 

@@ -65,7 +65,7 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
 
   const [quote, setQuote] = useState<Quote | null>(null);
   const [walletAddress, setWalletAddress] = useState<string>('');
-  const [orderType, setOrderType] = useState<'ON_RAMP' | 'OFF_RAMP'>('ON_RAMP');
+  const [orderType] = useState<'ON_RAMP' | 'OFF_RAMP'>('ON_RAMP');
 
   const [isWalletModalOpen, setIsWalletModalOpen] = useState<boolean>(false);
   const [loadingQuote, setLoadingQuote] = useState<boolean>(false);
@@ -78,11 +78,11 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
     if (isOpen) {
       const stored = typeof window !== 'undefined' ? localStorage.getItem('luminarail_wallet_address') : null;
       const addr = connectedWalletAddress || stored;
-      if (addr) {
+      if (addr && addr !== walletAddress) {
         setWalletAddress(addr);
       }
     }
-  }, [isOpen, connectedWalletAddress]);
+  }, [isOpen, connectedWalletAddress, walletAddress]);
 
   useEffect(() => {
     if (!isOpen || !quoteId) return;
@@ -97,7 +97,7 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
         } else {
           setError(response.message || 'Quote not found or expired.');
         }
-      } catch (err) {
+      } catch {
         setError('Failed to fetch quote information.');
       } finally {
         setLoadingQuote(false);
@@ -109,10 +109,7 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
 
   // Live Quote Expiration Countdown Timer
   useEffect(() => {
-    if (!quote || !quote.expiresAt) {
-      setSecondsLeft(null);
-      return;
-    }
+    if (!quote || !quote.expiresAt) return;
 
     const calcSeconds = () => {
       const expiresTime = new Date(quote.expiresAt).getTime();
@@ -135,8 +132,7 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
 
   const isExpired =
     quote?.status === 'EXPIRED' ||
-    (secondsLeft !== null && secondsLeft <= 0) ||
-    (quote?.expiresAt ? new Date(quote.expiresAt).getTime() <= Date.now() : false);
+    (secondsLeft !== null && secondsLeft <= 0);
 
   const formatTimer = (seconds: number | null) => {
     if (seconds === null) return '';
@@ -165,7 +161,7 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
       } else {
         setError(response.message || 'Failed to refresh quote.');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to refresh quote metrics.');
     } finally {
       setRefreshingQuote(false);

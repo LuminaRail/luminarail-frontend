@@ -56,12 +56,6 @@ function OrdersContent() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
 
-  useEffect(() => {
-    if (quoteIdFromQuery) {
-      setIsCreateOpen(true);
-    }
-  }, [quoteIdFromQuery]);
-
   const handleOpenDetails = async (orderId: string) => {
     const detailed = await fetchOrderDetails(orderId);
     if (detailed) {
@@ -294,7 +288,7 @@ function OrdersContent() {
             ) : error && orders.length === 0 ? (
               <div className="bg-white/60 dark:bg-slate-900/60 border border-rose-200 dark:border-rose-900/50 rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-3">
                 <AlertCircle className="w-8 h-8 text-rose-500 dark:text-rose-400" />
-                <p className="text-sm font-semibold text-rose-700 dark:text-rose-300">We couldn't load your orders</p>
+                <p className="text-sm font-semibold text-rose-700 dark:text-rose-300">We couldn&apos;t load your orders</p>
                 <p className="text-xs text-slate-600 dark:text-slate-400 max-w-md">{error}</p>
                 <button
                   onClick={() => fetchOrders(offset, limit)}

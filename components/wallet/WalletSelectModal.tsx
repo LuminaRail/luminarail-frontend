@@ -57,11 +57,7 @@ export function WalletSelectModal({
   error,
 }: WalletSelectModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [mounted] = useState(() => typeof window !== 'undefined');
 
   // Close modal on ESC key press
   useEffect(() => {

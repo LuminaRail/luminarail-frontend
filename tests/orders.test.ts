@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { StrKey } from '@stellar/stellar-sdk';
 import { OrdersService } from '../services/orders';
 import { PaymentsService } from '../services/payments';
 import { SettlementsService } from '../services/settlements';
@@ -177,7 +178,6 @@ describe('Frontend Orders, Payments & Settlements Services Unit Tests', () => {
   });
 
   it('Stellar Wallet Gate: validates ed25519 public keys correctly', () => {
-    const { StrKey } = require('@stellar/stellar-sdk');
     const validAddress = 'GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5';
     const invalidAddress = 'GINVALID_ADDRESS_123';
 

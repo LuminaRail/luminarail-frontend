@@ -65,7 +65,7 @@ export interface Payment {
   reference: string;
   idempotencyKey?: string | null;
   instructions?: PaymentInstruction | null;
-  metadata?: Record<string, any> | null;
+  metadata?: Record<string, unknown> | null;
   createdAt: string;
   updatedAt?: string;
 }

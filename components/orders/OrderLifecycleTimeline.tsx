@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Order, OrderStatus, SettlementStatus, PaymentStatus } from '@/types/orders';
-import { Check, Clock, AlertTriangle, ArrowRight } from 'lucide-react';
+import { Order, OrderStatus } from '@/types/orders';
+import { Check, Clock, AlertTriangle } from 'lucide-react';
 
 interface OrderLifecycleTimelineProps {
   order: Order;

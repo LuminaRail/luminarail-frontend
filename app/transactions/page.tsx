@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { GridScan } from '@/components/backgrounds/GridScan';
@@ -16,7 +16,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowRight,
-  Layers,
   Lock,
   History,
   FileSpreadsheet,
@@ -24,7 +23,7 @@ import {
 
 function TransactionsContent() {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
-  const { orders, total, limit, offset, loading, error, fetchOrders, fetchOrderDetails } = useOrders();
+  const { orders, total, limit, offset, loading, fetchOrders, fetchOrderDetails } = useOrders();
 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
