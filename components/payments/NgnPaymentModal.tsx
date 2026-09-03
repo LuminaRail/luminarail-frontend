@@ -72,11 +72,11 @@ export function NgnPaymentModal({
     !!payment.instructions?.paymentUrl ||
     payment.metadata?.railType === 'PAYSTACK_TEST_CHECKOUT';
 
-  const paymentUrl = payment.instructions?.paymentUrl || payment.metadata?.paymentUrl;
+  const paymentUrl = payment.instructions?.paymentUrl || (payment.metadata?.paymentUrl ? String(payment.metadata.paymentUrl) : undefined);
 
   const instructions = payment.instructions || {
     bankName: isPaystackMode ? 'Paystack Test Mode Checkout' : 'Providus Bank / LuminaRail Rail',
-    accountNumber: payment.metadata?.accountNumber || (isPaystackMode ? undefined : '9982014821'),
+    accountNumber: payment.metadata?.accountNumber ? String(payment.metadata.accountNumber) : (isPaystackMode ? undefined : '9982014821'),
     accountName: isPaystackMode ? 'Paystack Test Merchant' : 'LuminaRail On-Ramp Vault',
     reference: payment.reference || order.id,
     amount: payment.amount ? payment.amount.toString() : order.sourceAmount ? order.sourceAmount.toString() : '0',

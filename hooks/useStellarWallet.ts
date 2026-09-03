@@ -76,8 +76,8 @@ export function useStellarWallet() {
         return result.publicKey;
       }
       return null;
-    } catch (err: any) {
-      const errorMessage = err?.message || 'Failed to connect wallet.';
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to connect wallet.';
       setWalletState((prev) => ({
         ...prev,
         loading: false,

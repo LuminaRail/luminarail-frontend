@@ -15,9 +15,9 @@ export class ApiClient {
   }
 
   private static async processResponse<T>(res: Response): Promise<ApiResponse<T>> {
-    let body: any;
+    let body: Record<string, unknown> | null = null;
     try {
-      body = await res.json();
+      body = (await res.json()) as Record<string, unknown>;
     } catch {
       body = null;
     }
@@ -33,7 +33,7 @@ export class ApiClient {
         status: 'success',
         success: true,
         data: data as T,
-        message: body.message,
+        message: body.message as string | undefined,
       };
     }
 
@@ -42,8 +42,9 @@ export class ApiClient {
 
     if (body) {
       if (typeof body.error === 'object' && body.error !== null) {
-        message = body.error.message || message;
-        code = body.error.code;
+        const errObj = body.error as Record<string, unknown>;
+        if (typeof errObj.message === 'string') message = errObj.message;
+        if (typeof errObj.code === 'string') code = errObj.code;
       } else if (typeof body.error === 'string') {
         message = body.error;
       } else if (typeof body.message === 'string') {
@@ -58,7 +59,7 @@ export class ApiClient {
       success: false,
       message,
       code,
-      error: body?.error,
+      error: typeof body?.error === 'string' ? body.error : (body?.error as Record<string, unknown> | undefined),
     };
   }
 

@@ -397,10 +397,10 @@ export function OrderDetailsModal({ order, isOpen, onClose, onRefresh }: OrderDe
                         <span className="text-[10px] text-slate-500 block uppercase">Virtual Account Number</span>
                         <div className="flex items-center justify-between mt-0.5">
                           <span className="font-mono font-bold text-slate-900 dark:text-white text-sm">
-                            {payment.instructions?.accountNumber || payment.metadata?.accountNumber || '9982014821'}
+                            {payment.instructions?.accountNumber || (payment.metadata?.accountNumber ? String(payment.metadata.accountNumber) : '9982014821')}
                           </span>
                           <button
-                            onClick={() => handleCopy(payment.instructions?.accountNumber || payment.metadata?.accountNumber || '9982014821', 'accNumModal')}
+                            onClick={() => handleCopy(payment.instructions?.accountNumber || (payment.metadata?.accountNumber ? String(payment.metadata.accountNumber) : '9982014821'), 'accNumModal')}
                             className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 p-1 cursor-pointer"
                             title="Copy Account Number"
                           >

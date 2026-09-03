@@ -57,12 +57,9 @@ export function useOrders() {
 
   useEffect(() => {
     if (isAuthenticated && token) {
-      fetchOrders(0, limit);
-    } else {
-      setOrders([]);
-      setLoading(false);
+      void fetchOrders(0, limit);
     }
-  }, [isAuthenticated, token, limit]);
+  }, [isAuthenticated, token, limit, fetchOrders]);
 
   // Sensible 5-second polling if active orders are in processing/non-terminal status
   const pollingTimerRef = useRef<NodeJS.Timeout | null>(null);

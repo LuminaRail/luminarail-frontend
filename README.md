@@ -1,4 +1,9 @@
-# LuminaRail Frontend
+# LuminaRail Frontend (`luminarail-frontend`)
+
+[![CI Status](https://github.com/LuminaRail/luminarail-frontend/workflows/Frontend%20CI/badge.svg)](https://github.com/LuminaRail/luminarail-frontend/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![Framework: Next.js 16](https://img.shields.io/badge/Framework-Next.js%2016-black.svg)](https://nextjs.org)
+[![Stellar Network](https://img.shields.io/badge/Network-Stellar%20Testnet-purple.svg)](https://stellar.org)
 
 LuminaRail Frontend is the Next.js user interface for **LuminaRail**, an NGN → USDC on-ramp and Stellar/Soroban cross-border settlement application.
 
@@ -7,6 +12,28 @@ It connects end-users to the deployed LuminaRail backend API to request real-tim
 > [!IMPORTANT]
 > **Development/Testnet Notice:**
 > LuminaRail currently uses Paystack Test Mode and Stellar Testnet/Soroban Testnet for development and demonstration. Production NGN deposits and production Stellar settlement require production provider credentials, compliance/KYB, and production network configuration.
+
+---
+
+## Repository Cross-References
+
+LuminaRail is organized across three modular open-source repositories:
+- **`luminarail-frontend`** (This repository): Next.js 16 UI application for merchants, dashboard analytics, order tracking, and wallet integration.
+- **[`luminarail-backend`](../luminarail-backend)**: Node.js / Express API service handling Paystack webhooks, order state machines, FX rates, and Soroban settlement workers.
+- **[`luminarail-contracts`](../luminarail-contracts)**: Soroban smart contracts written in Rust (`escrow`, `settlement_vault`, `fee_manager`).
+
+---
+
+## Production vs. Sandbox Integrations
+
+| Subsystem / Interface | Sandbox / Development Behavior | Production Requirement |
+| :--- | :--- | :--- |
+| **Browser Wallet Connection** | Freighter / Lobstr on **Stellar Testnet** | Freighter / Lobstr configured for **Stellar Mainnet** |
+| **Backend API Connection** | `http://localhost:3001/api/v1` | Production HTTPS endpoint with SSL termination |
+| **Paystack Checkout** | Sandbox Paystack Pop-up with test card credentials | Production Paystack Inline / Redirect Checkout |
+| **Explorer Transaction Links** | Stellar Expert Testnet (`https://stellar.expert/explorer/testnet`) | Stellar Expert Mainnet (`https://stellar.expert/explorer/public`) |
+
+---
 
 ### Architecture & Settlement Data Flow
 

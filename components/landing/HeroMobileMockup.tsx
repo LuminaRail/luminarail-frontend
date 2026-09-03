@@ -4,12 +4,9 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HelpCircle, MoreVertical, Info, ChevronDown } from 'lucide-react';
-import { useTheme } from '../theme/ThemeProvider';
-
 export function HeroMobileMockup() {
   const [activeTab, setActiveTab] = useState<'BUY' | 'SELL'>('BUY');
   const [countdown, setCountdown] = useState<number>(24);
-  const { theme } = useTheme();
 
   useEffect(() => {
     const timer = setInterval(() => {
