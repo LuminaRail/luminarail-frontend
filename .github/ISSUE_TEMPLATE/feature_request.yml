@@ -1,0 +1,30 @@
+name: Feature Request
+description: Suggest a feature or UI improvement for LuminaRail Frontend
+title: "[FEATURE]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for suggesting a feature for `luminarail-frontend`!
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Describe the problem or UI gap this feature resolves.
+      placeholder: e.g. Quote calculator lacks quick copy button for exchange rate output...
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the component or page enhancement.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative UI options considered.
+    validations:
+      required: false

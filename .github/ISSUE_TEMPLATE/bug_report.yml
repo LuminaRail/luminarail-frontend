@@ -1,0 +1,45 @@
+name: Bug Report
+description: Report a UI, wallet, or routing bug in LuminaRail Frontend
+title: "[BUG]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for reporting a bug in `luminarail-frontend`!
+  - type: textarea
+    id: summary
+    attributes:
+      label: Bug Description
+      description: Concise summary of the UI or wallet issue.
+      placeholder: e.g. Freighter wallet connection modal fails to reset state on disconnect...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce in browser.
+      placeholder: |
+        1. Open `/orders` page
+        2. Click 'Connect Wallet'
+        3. Observe console error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: Expected UI response or state transition.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment & Browser Details
+      description: Browser version, Node version, Wallet extension used.
+      placeholder: |
+        - Browser: Chrome 128
+        - Wallet: Freighter Chrome Extension 5.0
+        - Node version: 20.15.0
+    validations:
+      required: false
