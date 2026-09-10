@@ -211,7 +211,7 @@ export function WalletSelectModal({
         <div className="pt-2 flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-xs font-semibold text-[#6B716B] dark:text-[#929992] hover:text-[#111411] dark:hover:text-[#F5F7F5] transition-colors cursor-pointer"
+            className="min-h-[44px] px-4 py-2 text-xs font-semibold text-[#6B716B] dark:text-[#929992] hover:text-[#111411] dark:hover:text-[#F5F7F5] transition-colors cursor-pointer"
           >
             Cancel
           </button>

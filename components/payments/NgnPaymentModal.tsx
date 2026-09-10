@@ -135,20 +135,20 @@ export function NgnPaymentModal({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 dark:bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity animate-fadeIn font-sans">
-      <div className="w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col transition-colors duration-200">
+      <div className="w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col transition-colors duration-200 max-h-[92dvh]">
         
         {/* Modal Header */}
-        <div className="bg-slate-50 dark:bg-slate-900 px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-lg border ${
+        <div className="bg-slate-50 dark:bg-slate-900 px-4 sm:px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className={`p-2 rounded-lg border shrink-0 ${
               isPaystackMode
                 ? 'bg-sky-500/10 border-sky-500/20 text-sky-600 dark:text-sky-400'
                 : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
             }`}>
               <Building2 className="w-5 h-5" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">NGN Deposit Instructions</h2>
                 {isPaystackMode && (
                   <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-50 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-500/40">
@@ -156,12 +156,12 @@ export function NgnPaymentModal({
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                 Order #{order.id.slice(0, 8)}... • Reference <span className="font-mono text-slate-800 dark:text-slate-300">{payment.reference}</span>
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 cursor-pointer">
+          <button onClick={onClose} aria-label="Close payment modal" className="shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -169,31 +169,31 @@ export function NgnPaymentModal({
         {/* Modal Body */}
         <div className="p-6 space-y-5 overflow-y-auto max-h-[80vh]">
           {error && (
-            <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2.5">
-              <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
-              <span>{error}</span>
+            <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+              <span className="min-w-0 break-words">{error}</span>
             </div>
           )}
 
           {successMsg && (
-            <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs flex items-center gap-2.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span>{successMsg}</span>
+            <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs flex items-start gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+              <span className="min-w-0 break-words">{successMsg}</span>
             </div>
           )}
 
           {/* Amount Overview Banner */}
-          <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex items-center justify-between">
-            <div>
+          <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="min-w-0">
               <span className="text-[10px] uppercase font-semibold text-slate-500 tracking-wider">NGN Deposit Required</span>
-              <div className="text-xl font-bold text-slate-900 dark:text-slate-100 mt-0.5">
+              <div className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100 mt-0.5 break-words">
                 ₦{Number(payment.amount).toLocaleString('en-NG', { minimumFractionDigits: 2 })} <span className="text-xs font-normal text-slate-500 dark:text-slate-400">NGN</span>
               </div>
             </div>
-            <ArrowRight className="w-5 h-5 text-slate-400 dark:text-slate-600" />
-            <div className="text-right">
+            <ArrowRight className="w-5 h-5 text-slate-400 dark:text-slate-600 hidden sm:block rotate-90 sm:rotate-0" />
+            <div className="min-w-0 text-left sm:text-right">
               <span className="text-[10px] uppercase font-semibold text-slate-500 tracking-wider">You Will Receive</span>
-              <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+              <div className="text-lg sm:text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-0.5 break-words">
                 {Number(order.destinationAmount).toLocaleString()} <span className="text-xs font-normal text-emerald-700 dark:text-emerald-300">{order.destinationAsset}</span>
               </div>
             </div>
@@ -239,10 +239,10 @@ export function NgnPaymentModal({
                 </div>
               ) : instructions.accountNumber ? (
                 /* Sandbox Virtual Account Number Row */
-                <div className="bg-white dark:bg-slate-950 p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-500/30 flex items-center justify-between">
-                  <div>
+                <div className="bg-white dark:bg-slate-950 p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-500/30 flex flex-wrap items-center justify-between gap-3">
+                  <div className="min-w-0">
                     <span className="text-[10px] uppercase font-semibold text-indigo-600 dark:text-indigo-400 tracking-wider">Virtual Account Number</span>
-                    <div className="text-xl font-mono font-bold text-slate-900 dark:text-white mt-0.5 tracking-wider">
+                    <div className="text-lg sm:text-xl font-mono font-bold text-slate-900 dark:text-white mt-0.5 tracking-wider break-all">
                       {instructions.accountNumber}
                     </div>
                   </div>
@@ -266,7 +266,7 @@ export function NgnPaymentModal({
               ) : null}
 
               {/* Details grid */}
-              <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div className="bg-white dark:bg-slate-950/60 p-3 rounded-lg border border-slate-200 dark:border-slate-800">
                   <span className="text-slate-500 text-[10px] uppercase font-semibold block">Provider Rail</span>
                   <span className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5 block">{instructions.bankName}</span>
@@ -280,14 +280,14 @@ export function NgnPaymentModal({
               </div>
 
               {/* Payment Reference */}
-              <div className="bg-white dark:bg-slate-950/60 p-3 rounded-lg border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                <div>
+              <div className="bg-white dark:bg-slate-950/60 p-3 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                <div className="min-w-0">
                   <span className="text-slate-500 text-[10px] uppercase font-semibold block">Payment Reference</span>
-                  <span className="font-mono font-bold text-amber-600 dark:text-amber-300 mt-0.5 block text-xs">{payment.reference}</span>
+                  <span className="font-mono font-bold text-amber-600 dark:text-amber-300 mt-0.5 block text-xs break-all">{payment.reference}</span>
                 </div>
                 <button
                   onClick={() => handleCopy(payment.reference, 'reference')}
-                  className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer"
                   title="Copy reference"
                 >
                   {copiedField === 'reference' ? (
@@ -324,7 +324,7 @@ export function NgnPaymentModal({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <button
                   onClick={() => handleVerify(false)}
                   disabled={verifying || simulating}
@@ -394,11 +394,11 @@ export function NgnPaymentModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="bg-slate-50 dark:bg-slate-950 px-6 py-3.5 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
-          <span className="text-slate-500">Provider: <span className="font-semibold text-slate-800 dark:text-slate-300">{payment.provider}</span></span>
+        <div className="bg-slate-50 dark:bg-slate-950 px-4 sm:px-6 py-3.5 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <span className="text-slate-500 truncate min-w-0">Provider: <span className="font-semibold text-slate-800 dark:text-slate-300">{payment.provider}</span></span>
           <button
             onClick={onClose}
-            className="py-2 px-4 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold rounded-lg transition-colors cursor-pointer"
+            className="min-h-[44px] py-2 px-4 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold rounded-lg transition-colors cursor-pointer"
           >
             Close
           </button>

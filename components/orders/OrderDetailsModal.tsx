@@ -171,16 +171,16 @@ export function OrderDetailsModal({ order, isOpen, onClose, onRefresh }: OrderDe
         {/* Modal Body */}
         <div className="p-6 space-y-6 flex-1 overflow-y-auto">
           {actionError && (
-            <div className="p-3 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
-              <span>{actionError}</span>
+            <div className="p-3 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+              <span className="min-w-0 break-words">{actionError}</span>
             </div>
           )}
 
           {actionSuccess && (
-            <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs flex items-center gap-2">
-              <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span>{actionSuccess}</span>
+            <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs flex items-start gap-2">
+              <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+              <span className="min-w-0 break-words">{actionSuccess}</span>
             </div>
           )}
 
@@ -244,7 +244,7 @@ export function OrderDetailsModal({ order, isOpen, onClose, onRefresh }: OrderDe
           </div>
 
           {/* Order Overview Summary */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-4">
             <div className="bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800/80 rounded-xl p-4">
               <span className="text-[10px] font-semibold uppercase text-slate-500 tracking-wider">Source Amount</span>
               <div className="text-lg font-bold text-slate-900 dark:text-slate-100 mt-1">
@@ -323,7 +323,7 @@ export function OrderDetailsModal({ order, isOpen, onClose, onRefresh }: OrderDe
               <Coins className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               <h3 className="text-xs font-semibold text-slate-800 dark:text-slate-300 uppercase tracking-wider">Quote Information</h3>
             </div>
-            <div className="grid grid-cols-2 gap-3 text-xs">
+            <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-3 text-xs">
               <div>
                 <span className="text-slate-500">Exchange Rate:</span>
                 <p className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5">
@@ -365,7 +365,7 @@ export function OrderDetailsModal({ order, isOpen, onClose, onRefresh }: OrderDe
 
             {payment ? (
               <div className="space-y-3 text-xs">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-3">
                   <div>
                     <span className="text-slate-500">Payment ID:</span>
                     <p className="font-mono text-slate-800 dark:text-slate-300 mt-0.5 truncate">{payment.id}</p>
@@ -392,7 +392,7 @@ export function OrderDetailsModal({ order, isOpen, onClose, onRefresh }: OrderDe
                       <span>NGN BANK TRANSFER DEPOSIT DETAILS</span>
                       <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Providus Bank / LuminaRail</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-2 text-xs">
                       <div className="bg-slate-50 dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800">
                         <span className="text-[10px] text-slate-500 block uppercase">Virtual Account Number</span>
                         <div className="flex items-center justify-between mt-0.5">
@@ -471,7 +471,7 @@ export function OrderDetailsModal({ order, isOpen, onClose, onRefresh }: OrderDe
 
             {settlement ? (
               <div className="space-y-3 text-xs">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-3">
                   <div>
                     <span className="text-slate-500">Settlement ID:</span>
                     <p className="font-mono text-slate-800 dark:text-slate-300 mt-0.5 truncate">{settlement.id}</p>

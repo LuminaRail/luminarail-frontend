@@ -89,10 +89,10 @@ export default function QuotesPage() {
                       if (currentQuote) clearQuote();
                     }}
                     placeholder={side === 'source' ? '100000' : '100'}
-                    className="min-w-0 flex-1 bg-transparent px-4 py-4 text-lg outline-none text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 font-bold"
+                    className="min-w-0 flex-1 bg-transparent px-4 py-4 min-h-[44px] text-base sm:text-lg outline-none text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 font-bold"
                   />
 
-                  <div className="flex items-center gap-2 border-l border-slate-200 dark:border-slate-700 px-4 font-semibold text-slate-700 dark:text-slate-200">
+                  <div className="flex items-center gap-2 border-l border-slate-200 dark:border-slate-700 px-3 sm:px-4 font-semibold text-slate-700 dark:text-slate-200 shrink-0">
                     {side === 'source' ? (
                       <>
                         <img
@@ -147,7 +147,7 @@ export default function QuotesPage() {
                     );
                     if (currentQuote) clearQuote();
                   }}
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-950 px-4 py-3 outline-none text-slate-900 dark:text-slate-100 font-medium"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-950 px-4 py-3 min-h-[44px] outline-none text-slate-900 dark:text-slate-100 font-medium"
                 >
                   <option value="source" className="bg-white dark:bg-slate-900">
                     I enter the NGN amount

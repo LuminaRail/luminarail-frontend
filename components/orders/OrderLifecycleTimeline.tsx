@@ -122,7 +122,7 @@ export function OrderLifecycleTimeline({ order }: OrderLifecycleTimelineProps) {
 
   return (
     <div className="w-full py-4">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between gap-2 mb-4">
         <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Order Lifecycle State</h3>
         <span
           className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded border ${
@@ -186,7 +186,7 @@ export function OrderLifecycleTimeline({ order }: OrderLifecycleTimelineProps) {
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{step.description}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 break-words">{step.description}</p>
               </div>
             </div>
           );

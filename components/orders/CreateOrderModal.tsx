@@ -269,7 +269,7 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 dark:bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity animate-fadeIn">
-      <div className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden font-sans transition-colors duration-200">
+      <div className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden font-sans transition-colors duration-200 max-h-[92dvh]">
         
         {/* Header */}
         <div className="bg-slate-50 dark:bg-slate-900 px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
@@ -282,7 +282,7 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
               <p className="text-xs text-slate-600 dark:text-slate-400">Review quote metrics and specify destination wallet</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 cursor-pointer">
+          <button onClick={onClose} aria-label="Close order modal" className="shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -309,10 +309,10 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
               
               {/* Error Banner with Refresh Action */}
               {error && (
-                <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
+                <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
                     <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
-                    <div>
+                    <div className="min-w-0">
                       <p className="font-semibold">Unable to process quote</p>
                       <p className="mt-0.5">{error}</p>
                     </div>
@@ -368,17 +368,17 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
 
               {/* Quote Metrics Summary */}
               <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-3">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <span className="text-[10px] uppercase font-semibold text-slate-500">You Pay</span>
-                    <div className="text-lg font-bold text-slate-900 dark:text-slate-100 mt-0.5">
+                    <div className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 mt-0.5 break-words">
                       {Number(quote.sourceAmount).toLocaleString()} <span className="text-xs font-normal text-slate-500 dark:text-slate-400">{quote.sourceCurrency}</span>
                     </div>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-slate-400 dark:text-slate-600" />
-                  <div className="text-right">
+                  <ArrowRight className="w-5 h-5 text-slate-400 dark:text-slate-600 hidden sm:block rotate-90 sm:rotate-0" />
+                  <div className="sm:text-right">
                     <span className="text-[10px] uppercase font-semibold text-slate-500">You Receive</span>
-                    <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+                    <div className="text-base sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-0.5 break-words">
                       {Number(quote.destinationAmount).toLocaleString()} <span className="text-xs font-normal text-emerald-700 dark:text-emerald-300">{quote.destinationAsset}</span>
                     </div>
                   </div>
@@ -387,9 +387,9 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
                 <div className="pt-3 border-t border-slate-200 dark:border-slate-800/80 grid grid-cols-2 gap-2 text-xs">
                   <div>
                     <span className="text-slate-500">Exchange Rate:</span>
-                    <span className="font-semibold text-slate-800 dark:text-slate-300 block">{Number(quote.exchangeRate).toFixed(6)}</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-300 block break-words">{Number(quote.exchangeRate).toFixed(6)}</span>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right min-w-0">
                     <span className="text-slate-500">Platform Fee:</span>
                     <span className="font-semibold text-slate-800 dark:text-slate-300 block">{Number(quote.fee).toLocaleString()} {quote.sourceCurrency}</span>
                   </div>
@@ -422,7 +422,7 @@ export function CreateOrderModal({ quoteId, isOpen, onClose, onOrderCreated }: C
                   value={walletAddress}
                   onChange={(e) => setWalletAddress(e.target.value)}
                   placeholder="GBBD... (56-char Stellar Public Key G...)"
-                  className="w-full bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-indigo-500 font-mono"
+                  className="w-full bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2.5 min-h-[44px] text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-indigo-500 font-mono"
                 />
                 <p className="text-[11px] text-slate-500 mt-1">
                   Settling USDC to this Stellar account via Soroban Vault smart contract.
