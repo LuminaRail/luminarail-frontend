@@ -16,4 +16,12 @@ export class SettlementsService {
   ): Promise<ApiResponse<Settlement>> {
     return ApiClient.get<Settlement>(`/settlements/${id}`, token);
   }
+
+  public static async retrySettlement(
+    id: string,
+    token?: string
+  ): Promise<ApiResponse<Settlement>> {
+    return ApiClient.post<Settlement, Record<string, unknown>>(`/settlements/${id}/retry`, {}, token);
+  }
 }
+
